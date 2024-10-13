@@ -1,0 +1,33 @@
+{
+	"schemaVersion": 1,
+	"id": "betterfoxcraft",
+	"version": "${version}",
+	"name": "BetterFoxcraft",
+	"description": "A Mod to enhance the Experience on Foxcraft",
+	"authors": [
+		"DZultra"
+	],
+	"license": "MIT",
+	"icon": "assets/betterfoxcraft/icon.jpg",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.dzultra.betterfoxcraft.BetterFoxcraft"
+		],
+		"fabric-datagen": [
+			"net.dzultra.betterfoxcraft.BetterFoxcraftDataGenerator"
+		]
+	},
+	"mixins": [
+		"betterfoxcraft.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.7",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
