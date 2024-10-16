@@ -52,11 +52,11 @@ public class BetterFoxcraftClient implements ClientModInitializer {
         }));
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
             dispatcher.register(ClientCommandManager.literal("oc")
-                    .then(ClientCommandManager.argument("text", StringArgumentType.string())
+                    .then(ClientCommandManager.argument("text", StringArgumentType.greedyString())
                         .executes(context -> {
-                            String text = StringArgumentType.getString(context, "language_text");
+                            String text = StringArgumentType.getString(context, "text");
                             try {
-                                MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("ob chat" + text);
+                                MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("ob chat " + text);
                             } catch (IllegalArgumentException e) {
                                 System.out.println(e.getMessage());
                                 MinecraftClient.getInstance().player.sendMessage(Text.literal("Error Code: 1"), false);
