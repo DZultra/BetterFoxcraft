@@ -56,6 +56,18 @@ public class BetterFoxcraftClient implements ClientModInitializer {
         ANSWER_MAP.put("what_is_a_prestige", "You prestige whenever you mined through all [/ob phases]. Once you do so, you will get a Pinata Key and a Upgrade Point which you can spend in [/ob upgrades].");
         ANSWER_MAP.put("free_stuff", "You can get free items at my Player Warp. To get there run the command: [/pwarp go DZultra]. Enter the Shop Area and look around to find free and cheap items. If you want to support my pwarp do [/like].");
         ANSWER_MAP.put("xp_farm", "You can go to my xp farm. Just run the command: [/pwarp go DZultra]. Enter the Xp Area and starting killing some mobs.");
+
+        ANSWER_MAP.put("guide", "https://www.mcfoxcraft.com/threads/a-comprehensive-oneblock-guide-pyrofarming.38325/");
+        ANSWER_MAP.put("bug", "https://www.mcfoxcraft.com/forums/bug-reports.26/");
+        ANSWER_MAP.put("feedback", "https://feedback.foxcraft.net/");
+        ANSWER_MAP.put("suggestion", "https://feedback.foxcraft.net/");
+        ANSWER_MAP.put("appeal", "https://www.mcfoxcraft.com/forums/appeals.24/");
+        ANSWER_MAP.put("player", "https://www.mcfoxcraft.com/forums/player-reports.23/");
+        ANSWER_MAP.put("application", "https://www.mcfoxcraft.com/forums/staff-applications.27/");
+        ANSWER_MAP.put("payment", "https://www.mcfoxcraft.com/forums/donation-support.22/");
+        ANSWER_MAP.put("store", "https://store.foxcraft.net/");
+        ANSWER_MAP.put("forums", " https://www.mcfoxcraft.com/");
+
     }
 
     @Override
@@ -106,69 +118,7 @@ public class BetterFoxcraftClient implements ClientModInitializer {
                         })
                     ));
         });
-        ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> {
-            dispatcher.register(
-                    literal("link").executes(context -> {
-                        MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- No specific link has been chosen -|\n")
-                                .setStyle(Style.EMPTY.withColor(Formatting.RED).withBold(true)), false);
-                        return 0;
-                    }).then(literal("bug").executes(context -> {
-                        MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- Bug Report: https://www.mcfoxcraft.com/forums/bug-reports.26/ -|\n")
-                                .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "https://www.mcfoxcraft.com/forums/bug-reports.26/"))
-                                        .withColor(Formatting.GOLD)
-                                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,Text.literal("Click to Copy")))), false);
-                        return 0;
-                    })).then(literal("player").executes(context -> {
-                        MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- Player Report: https://www.mcfoxcraft.com/forums/player-reports.23/ -|\n")
-                                .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "https://www.mcfoxcraft.com/forums/player-reports.23/"))
-                                        .withColor(Formatting.GOLD)
-                                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,Text.literal("Click to Copy")))), false);
-                        return 0;
-                    })).then(literal("feedback").executes(context -> {
-                        MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- Feedback:  https://feedback.foxcraft.net/ -|\n")
-                                .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, " https://feedback.foxcraft.net/"))
-                                        .withColor(Formatting.GOLD)
-                                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,Text.literal("Click to Copy")))), false);
-                        return 0;
-                    })).then(literal("forums").executes(context -> {
-                        MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- Forums: https://www.mcfoxcraft.com/ -|\n")
-                                .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "https://www.mcfoxcraft.com/"))
-                                        .withColor(Formatting.GOLD)
-                                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,Text.literal("Click to Copy")))), false);
-                        return 0;
-                    })).then(literal("payment").executes(context -> {
-                        MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- Payment Support: https://www.mcfoxcraft.com/forums/donation-support.22// -|\n")
-                                .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "https://www.mcfoxcraft.com/forums/donation-support.22/"))
-                                        .withColor(Formatting.GOLD)
-                                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,Text.literal("Click to Copy")))), false);
-                        return 0;
-                    })).then(literal("appeal").executes(context -> {
-                        MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- Appeal: https://www.mcfoxcraft.com/forums/appeals.24/ -|\n")
-                                .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "https://www.mcfoxcraft.com/forums/appeals.24/"))
-                                        .withColor(Formatting.GOLD)
-                                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,Text.literal("Click to Copy")))), false);
-                        return 0;
-                    })).then(literal("application").executes(context -> {
-                        MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- Staff Application: https://www.mcfoxcraft.com/forums/staff-applications.27/ -|\n")
-                                .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "https://www.mcfoxcraft.com/forums/staff-applications.27/"))
-                                        .withColor(Formatting.GOLD)
-                                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,Text.literal("Click to Copy")))), false);
-                        return 0;
-                    })).then(literal("store").executes(context -> {
-                        MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- Store:  https://store.foxcraft.net/ -|\n")
-                                .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, " https://store.foxcraft.net/"))
-                                        .withColor(Formatting.GOLD)
-                                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,Text.literal("Click to Copy")))), false);
-                        return 0;
-                    })).then(literal("guide").executes(context -> {
-                        MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- Guide:  https://www.mcfoxcraft.com/threads/a-comprehensive-oneblock-guide-pyrofarming.38325/ -|\n")
-                                .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, " https://www.mcfoxcraft.com/threads/a-comprehensive-oneblock-guide-pyrofarming.38325/"))
-                                        .withColor(Formatting.GOLD)
-                                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,Text.literal("Click to Copy")))), false);
-                        return 0;
-                    }))
-            );
-        }));
+
         ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> {
             var answerCommand = literal("answer").executes(context -> {
                 MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- No specific answer has been chosen -|\n")
