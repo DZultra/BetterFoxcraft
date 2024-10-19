@@ -28,15 +28,15 @@ public class BetterFoxcraftClient implements ClientModInitializer {
     static {
         ANSWER_MAP.put("how_to_get_to_island", "You can navigate to your island by running either of the following commands: [/is] | [/ob].");
         ANSWER_MAP.put("how_to_get_to_spawn", "You can navigate to spawn by running to command: [/spawn].");
-        ANSWER_MAP.put("how_to_get_to_pinata", "The Pinata Spawns at the PvP Area. You can navigate there by running the command: [/warp pvp].");
+        ANSWER_MAP.put("how_to_get_to_pinata", "The Pinata spawns at the PvP Area. You can navigate there by running the command: [/warp pvp].");
         ANSWER_MAP.put("how_to_go_to_nether", "You can access the Nether by building a Nether Portal on your Island. Inside you won't find the normal Nether but another Oneblock which spawns Nether Blocks.");
         ANSWER_MAP.put("how_to_go_to_end", "You can navigate to the End Portal by running the command [/warp end]. However, you need to have one Prestige to access.");
         ANSWER_MAP.put("how_to_teleport_to_pwarp", "You can navigate to a Player Warp by running either of the following commands: [/pwarp go <name>] or [/wwarp go <name>].");
         ANSWER_MAP.put("how_to_get_to_crates", "You can navigate to crates by running the command: [/crates].");
-        ANSWER_MAP.put("how_to_get_money", "You can get Money for example by building a bamboo farm and selling the bamboo to /shop. In addition, you can do jobs in [/jobsmenu]. Also possible is starting with [/farm] a Plugin to make good starter money.");
+        ANSWER_MAP.put("how_to_get_money", "You can gather Money for example by building a bamboo farm and selling the bamboo to /shop. In addition, you can do jobs in [/jobsmenu]. Also possible is starting with [/farm] a Plugin to make good starter money.");
         ANSWER_MAP.put("how_to_get_rank", "You can buy ranks on the [/store] or buy Rank Vouchers of other players for in-game money.");
         ANSWER_MAP.put("how_to_get_minions", "You can buy minions on the [/store] or buy them of other players for in-game money.");
-        ANSWER_MAP.put("how_to_get_spawners", "You can buy minions on the [/store] or buy them of other players for in-game money.");
+        ANSWER_MAP.put("how_to_get_spawners", "You can buy spawners on the [/store] or buy them of other players for in-game money.");
         ANSWER_MAP.put("how_to_get_ce", "You can get Custom Enchants in [/ce]. There you buy the different rarity's for different amounts of Xp. Of course, you are always able to buy Custom Enchants from other players.");
         ANSWER_MAP.put("how_to_make_pwarp", "You can create a Player Warp by placing any type of sign and writing [welcome] in the first line. Make sure to include the Brackets. In addition, in the bottom three lines you can write a description of your pwarp.");
         ANSWER_MAP.put("how_to_sell_items", "You can sell items in [/shop] or create a pwarp with chestshops. Additionally, you can put items up for auction: [/ah]");
@@ -52,10 +52,12 @@ public class BetterFoxcraftClient implements ClientModInitializer {
         ANSWER_MAP.put("how_to_display_inv", "You can display your inventory by typing [inv ] in chat. Make sure to type it without the space. You can also display and item with [i ] while holding your desired item in hand and applying the same logic.");
         ANSWER_MAP.put("how_to_get_upgradepoints", "You receive  one upgrade point for every Prestige you do. To achieve a Prestige you need to mine through all [/ob phases].");
         ANSWER_MAP.put("how_to_get_increase_island_size", "You can increase your island size by mining your oneblock. For every two phases you complete your island gets bigger by one block in each direction. You can also spend money in [/ob upgrade] to increase island size.");
+        ANSWER_MAP.put("how_to_get_custom_color", "You can get different colors with MC Color Codes. For a full list, google 'MC Color Codes'.");
         ANSWER_MAP.put("what_is_pinata", "The Pinata is a Llama that spawns once 125 Votes have been made. It spawns at the Pvp Area which you can navigate to by running the command [/warp pvp]. If you hit it at least once you get a Pinata Key at the end which you can redeem at [/crates].");
         ANSWER_MAP.put("what_is_a_prestige", "You prestige whenever you mined through all [/ob phases]. Once you do so, you will get a Pinata Key and a Upgrade Point which you can spend in [/ob upgrades].");
         ANSWER_MAP.put("free_stuff", "You can get free items at my Player Warp. To get there run the command: [/pwarp go DZultra]. Enter the Shop Area and look around to find free and cheap items. If you want to support my pwarp do [/like].");
         ANSWER_MAP.put("xp_farm", "You can go to my xp farm. Just run the command: [/pwarp go DZultra]. Enter the Xp Area and starting killing some mobs.");
+        ANSWER_MAP.put("is_litematica_allowed", "Yes, Litematica is allowed. However, you are not allowed to use the Easy Place Feature.");
 
         ANSWER_MAP.put("guide", "https://www.mcfoxcraft.com/threads/a-comprehensive-oneblock-guide-pyrofarming.38325/");
         ANSWER_MAP.put("bug", "https://www.mcfoxcraft.com/forums/bug-reports.26/");
