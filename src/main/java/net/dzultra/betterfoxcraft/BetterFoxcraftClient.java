@@ -134,43 +134,43 @@ public class BetterFoxcraftClient implements ClientModInitializer {
                         MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- No specific answer has been chosen -|\n")
                                 .setStyle(Style.EMPTY.withColor(Formatting.RED).withBold(true)), false);
                         return 0;
-                    }).then(literal("to_island").executes(context -> {
+                    }).then(literal("how_to_get_to_island").executes(context -> {
                         MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- Click to get answer -|\n")
                                 .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "You can navigate to your island by running either of the following commands: [/is] | [/ob]."))
                                         .withColor(Formatting.GOLD)
                                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,Text.literal("Copy")))), false);
                         return 0;
-                    })).then(literal("to_spawn").executes(context -> {
+                    })).then(literal("how_to_get_to_spawn").executes(context -> {
                         MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- Click to get answer -|\n")
                                 .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "You can navigate to spawn by running to command: [/spawn]."))
                                         .withColor(Formatting.GOLD)
                                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,Text.literal("Copy")))), false);
                         return 0;
-                    })).then(literal("to_pinata").executes(context -> {
+                    })).then(literal("how_to_get_to_pinata").executes(context -> {
                         MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- Click to get answer -|\n")
                                 .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "The Pinata Spawns at the PvP Area. You can navigate there by running the command: [/warp pvp]."))
                                         .withColor(Formatting.GOLD)
                                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,Text.literal("Copy")))), false);
                         return 0;
-                    })).then(literal("to_nether").executes(context -> {
+                    })).then(literal("how_to_go_to_nether").executes(context -> {
                         MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- Click to get answer -|\n")
                                 .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "You can access the Nether by building a Nether Portal on your Island. Inside you won't find the normal Nether but another Oneblock which spawns Nether Blocks."))
                                         .withColor(Formatting.GOLD)
                                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,Text.literal("Copy")))), false);
                         return 0;
-                    })).then(literal("to_end").executes(context -> {
+                    })).then(literal("how_to_go_to_end").executes(context -> {
                         MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- Click to get answer -|\n")
                                 .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "You can navigate to the End Portal by running the command [/warp end]. However, you need to have one Prestige to access."))
                                         .withColor(Formatting.GOLD)
                                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("Copy")))), false);
                         return 0;
-                    })).then(literal("to_pwarp").executes(context -> {
+                    })).then(literal("how_to_teleport_to_pwarp").executes(context -> {
                         MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- Click to get answer -|\n")
                                 .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "You can navigate to a Player Warp by running either of the following commands: [/pwarp go <name>] or [/wwarp go <name>]."))
                                         .withColor(Formatting.GOLD)
                                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("Copy")))), false);
                         return 0;
-                    })).then(literal("to_crates").executes(context -> {
+                    })).then(literal("how_to_get_to_crates").executes(context -> {
                         MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- Click to get answer -|\n")
                                 .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "You can navigate to crates by running the command: [/crates]."))
                                         .withColor(Formatting.GOLD)
@@ -182,31 +182,31 @@ public class BetterFoxcraftClient implements ClientModInitializer {
                                         .withColor(Formatting.GOLD)
                                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,Text.literal("Copy")))), false);
                         return 0;
-                    })).then(literal("get_money").executes(context -> {
+                    })).then(literal("how_to_get_money").executes(context -> {
                         MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- Click to get answer -|\n")
                                 .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "You can get Money for example by building a bamboo farm and selling the bamboo to /shop. In addition, you can do jobs in [/jobsmenu]. Also possible is starting with [/farm] a Plugin to make good starter money."))
                                         .withColor(Formatting.GOLD)
                                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("Copy")))), false);
                         return 0;
-                    })).then(literal("get_rank").executes(context -> {
+                    })).then(literal("how_to_get_rank").executes(context -> {
                         MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- Click to get answer -|\n")
                                 .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "You can buy ranks on the [/store] or buy Rank Vouchers of other players for in-game money."))
                                         .withColor(Formatting.GOLD)
                                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("Copy")))), false);
                         return 0;
-                    })).then(literal("get_minions").executes(context -> {
+                    })).then(literal("how_to_get_minions").executes(context -> {
                         MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- Click to get answer -|\n")
                                 .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "You can buy minions on the [/store] or buy them of other players for in-game money."))
                                         .withColor(Formatting.GOLD)
                                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("Copy")))), false);
                         return 0;
-                    })).then(literal("get_spawners").executes(context -> {
+                    })).then(literal("how_to_get_spawners").executes(context -> {
                         MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- Click to get answer -|\n")
                                 .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "You can buy spawners on the [/store] or buy them of other players for in-game money."))
                                         .withColor(Formatting.GOLD)
                                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("Copy")))), false);
                         return 0;
-                    })).then(literal("get_ce").executes(context -> {
+                    })).then(literal("how_to_get_ce").executes(context -> {
                         MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- Click to get answer -|\n")
                                 .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD,"You can get Custom Enchants in [/ce]. There you buy the different rarity's for different amounts of Xp. Of course, you are always able to buy Custom Enchants from other players."))
                                         .withColor(Formatting.GOLD)
@@ -284,13 +284,13 @@ public class BetterFoxcraftClient implements ClientModInitializer {
                                         .withColor(Formatting.GOLD)
                                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("Copy")))), false);
                         return 0;
-                    })).then(literal("how_to_get_free_stuff").executes(context -> {
+                    })).then(literal("free_stuff").executes(context -> {
                         MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- Click to get answer -|\n")
                                 .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "You can get free items at my Player Warp. To get there run the command: [/pwarp go DZultra]. Enter the Shop Area and look around to find free and cheap items. If you want to support my pwarp do [/like]."))
                                         .withColor(Formatting.GOLD)
                                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("Copy")))), false);
                         return 0;
-                    })).then(literal("how_to_get_to_xp_farm").executes(context -> {
+                    })).then(literal("xp_farm").executes(context -> {
                         MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- Click to get answer -|\n")
                                 .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "You can go to my xp farm. Just run the command: [/pwarp go DZultra]. Enter the Xp Area and starting killing some mobs."))
                                         .withColor(Formatting.GOLD)
