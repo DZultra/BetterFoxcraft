@@ -37,6 +37,7 @@ public class BetterFoxcraftClient implements ClientModInitializer {
         ANSWER_MAP.put("how_to_get_rank", "You can buy ranks on the [/store] or buy Rank Vouchers of other players for in-game money.");
         ANSWER_MAP.put("how_to_get_minions", "You can buy minions on the [/store] or buy them of other players for in-game money.");
         ANSWER_MAP.put("how_to_get_spawners", "You can buy spawners on the [/store] or buy them of other players for in-game money.");
+        ANSWER_MAP.put("how_to_get_title_points", "You can get Title Points from Crates or buy vouchers of other Players");
         ANSWER_MAP.put("how_to_get_ce", "You can get Custom Enchants in [/ce]. There you buy the different rarity's for different amounts of Xp. Of course, you are always able to buy Custom Enchants from other players.");
         ANSWER_MAP.put("how_to_make_pwarp", "You can create a Player Warp by placing any type of sign and writing [welcome] in the first line. Make sure to include the Brackets. In addition, in the bottom three lines you can write a description of your pwarp.");
         ANSWER_MAP.put("how_to_sell_items", "You can sell items in [/shop] or create a pwarp with chestshops. Additionally, you can put items up for auction: [/ah]");
@@ -55,6 +56,7 @@ public class BetterFoxcraftClient implements ClientModInitializer {
         ANSWER_MAP.put("how_to_get_custom_color", "You can get different colors with MC Color Codes. For a full list, google 'MC Color Codes'.");
         ANSWER_MAP.put("what_is_pinata", "The Pinata is a Llama that spawns once 125 Votes have been made. It spawns at the Pvp Area which you can navigate to by running the command [/warp pvp]. If you hit it at least once you get a Pinata Key at the end which you can redeem at [/crates].");
         ANSWER_MAP.put("what_is_a_prestige", "You prestige whenever you mined through all [/ob phases]. Once you do so, you will get a Pinata Key and a Upgrade Point which you can spend in [/ob upgrades].");
+        ANSWER_MAP.put("what_is_a_title_point", "In TAB you might see some people having a Custom Tag after their name. That is a 'Title' which you can get with a Title Point!");
         ANSWER_MAP.put("free_stuff", "You can get free items at my Player Warp. To get there run the command: [/pwarp go DZultra]. Enter the Shop Area and look around to find free and cheap items. If you want to support my pwarp do [/like].");
         ANSWER_MAP.put("xp_farm", "You can go to my xp farm. Just run the command: [/pwarp go DZultra]. Enter the Xp Area and starting killing some mobs.");
         ANSWER_MAP.put("is_litematica_allowed", "Yes, Litematica is allowed. However, you are not allowed to use the Easy Place Feature.");
@@ -68,7 +70,8 @@ public class BetterFoxcraftClient implements ClientModInitializer {
         ANSWER_MAP.put("application", "https://www.mcfoxcraft.com/forums/staff-applications.27/");
         ANSWER_MAP.put("payment", "https://www.mcfoxcraft.com/forums/donation-support.22/");
         ANSWER_MAP.put("store", "https://store.foxcraft.net/");
-        ANSWER_MAP.put("forums", " https://www.mcfoxcraft.com/");
+        ANSWER_MAP.put("forums", "https://www.mcfoxcraft.com/");
+        ANSWER_MAP.put("vote", "https://www.mcfoxcraft.com/help/voting/");
 
     }
 
