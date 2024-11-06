@@ -69,8 +69,8 @@ public class BetterFoxcraftClient implements ClientModInitializer {
         ANSWER_MAP.put("what_is_a_title_point", "In TAB you might see some people having a Custom Tag after their name. That is a 'Title' which you can get with a Title Point!");
         ANSWER_MAP.put("what_is_a_vote_point", "Whenever you vote you received a Vote Point. If you have gathered enough you can use them to crate a Giftcard for the [/store].");
 
-        ANSWER_MAP.put("free_stuff", "You can get free items at my Player Warp. To get there run the command: [/pwarp go DZultra]. Enter the Shop Area and look around to find free and cheap items. If you want to support my pwarp do [/like].");
-        ANSWER_MAP.put("xp_farm", "You can go to my xp farm. Just run the command: [/pwarp go DZultra]. Enter the Xp Area and starting killing some mobs.");
+        ANSWER_MAP.put("free_stuff", "You can get free items at DZultra's Warp. To get there run the command: [/pwarp go DZultra]. Enter the Shop Area and look around to find free and cheap items.");
+        ANSWER_MAP.put("xp_farm", "A good xp farm to use it DZultras. Just run the command: [/pwarp go DZultra]. Enter the Xp Area and start killing some mobs.");
         ANSWER_MAP.put("is_litematica_allowed", "Yes, Litematica is allowed. However, you are not allowed to use the Easy Place Feature.");
 
         ANSWER_MAP.put("guide", "https://www.mcfoxcraft.com/threads/a-comprehensive-oneblock-guide-pyrofarming.38325/");
@@ -110,16 +110,6 @@ public class BetterFoxcraftClient implements ClientModInitializer {
                                                 return 1;
                                             })))));
         });
-        ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> {
-            dispatcher.register(
-                    literal("start").executes(context -> {
-                        MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("redeem");
-                        MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("redeemkey");
-                        MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("daily");
-                        return 0;
-                    })
-            );
-        }));
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
             dispatcher.register(ClientCommandManager.literal("oc")
                     .then(ClientCommandManager.argument("text", StringArgumentType.greedyString())
