@@ -146,7 +146,10 @@ public class BetterFoxcraftClient implements ClientModInitializer {
         ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> {
             var answerCommand = literal("answer").executes(context -> {
                 MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- No specific answer has been chosen -|\n")
-                        .setStyle(Style.EMPTY.withColor(Formatting.RED).withBold(true)), false);
+                        .setStyle(Style.EMPTY
+                                .withColor(Formatting.RED)
+                                .withBold(true)
+                        ), false);
                 return 0;
             });
 
@@ -169,7 +172,8 @@ public class BetterFoxcraftClient implements ClientModInitializer {
             MinecraftClient.getInstance().player.sendMessage(Text.literal(faqMessage)
                     .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, answer))
                             .withColor(Formatting.GOLD)
-                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,Text.literal("Copy")))), false);
+                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,Text.literal("Copy")))
+                    ), false);
             return 0;
         });
     }
