@@ -116,6 +116,7 @@ public class BetterFoxcraftClient implements ClientModInitializer {
                                                 return 1;
                                             })))));
         });
+
         ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> {
             dispatcher.register(
                     literal("start").executes(context -> {
@@ -126,6 +127,7 @@ public class BetterFoxcraftClient implements ClientModInitializer {
                     })
             );
         }));
+
         ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> {
             dispatcher.register(
                     literal("staffmode").executes(context -> {
@@ -137,14 +139,7 @@ public class BetterFoxcraftClient implements ClientModInitializer {
                     })
             );
         }));
-        ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> {
-            dispatcher.register(
-                    literal("jackpot").executes(context -> {
-                        MinecraftClient.getInstance().player.sendMessage(Text.literal("\nYou should not gamble!\n").setStyle(Style.EMPTY.withColor(Formatting.RED).withBold(true)), false);
-                        return 0;
-                    })
-            );
-        }));
+
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
             dispatcher.register(ClientCommandManager.literal("oc")
                     .then(ClientCommandManager.argument("text", StringArgumentType.greedyString())
@@ -206,7 +201,8 @@ public class BetterFoxcraftClient implements ClientModInitializer {
             MinecraftClient.getInstance().player.sendMessage(Text.literal(faqMessage)
                     .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, answer))
                             .withColor(Formatting.GOLD)
-                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,Text.literal("Copy")))), false);
+                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,Text.literal("Copy")))
+                    ), false);
             return 0;
         });
     }
