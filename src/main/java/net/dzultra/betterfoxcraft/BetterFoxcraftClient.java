@@ -7,11 +7,13 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.command.argument.EnumArgumentType;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.StringIdentifiable;
 import net.suuft.libretranslate.Language;
 import net.suuft.libretranslate.Translator;
 
@@ -130,13 +132,21 @@ public class BetterFoxcraftClient implements ClientModInitializer {
 
         ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> {
             dispatcher.register(
-                    literal("staffmode").executes(context -> {
-                        MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("gmsp");
-                        MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("fly enable");
-                        MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("vanish");
-                        MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("hide");
-                        return 0;
-                    })
+                    literal("staffmode")
+                            .then(literal("enable").executes(context -> {
+                                MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("vanish");
+                                MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("hide");
+                                MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("gmsp");
+                                MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("fly enable");
+                                return 1;
+                            }))
+                            .then(literal("disable").executes(context -> {
+                                MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("vanish");
+                                MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("hide");
+                                MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("gms");
+                                MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("fly enable");
+                                return 1;
+                            }))
             );
         }));
 
@@ -205,5 +215,15 @@ public class BetterFoxcraftClient implements ClientModInitializer {
                     ), false);
             return 0;
         });
+    }
+
+    protected enum StaffState implements StringIdentifiable {
+        ENABLE,
+        DISABLE;
+
+        @Override
+        public String asString() {
+            return "enable/disable";
+        }
     }
 }
