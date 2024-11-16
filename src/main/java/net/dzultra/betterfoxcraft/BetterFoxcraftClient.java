@@ -36,6 +36,7 @@ public class BetterFoxcraftClient implements ClientModInitializer {
         ANSWER_MAP.put("how_to_get_money", "You can gather Money for example by building a bamboo farm and selling the bamboo to /shop. In addition, you can do jobs in [/jobsmenu]. Also possible is starting with [/farm] a Plugin to make good starter money.");
         ANSWER_MAP.put("how_to_get_rank", "You can buy ranks on the [/store] or buy Rank Vouchers off other players for in-game money.");
         ANSWER_MAP.put("how_to_get_minions", "You can buy minions on the [/store] or buy them off other players for in-game money.");
+        ANSWER_MAP.put("how_to_get_backpacks","Backpacks are obtain from Crates. However, you are always able to buy them off other player using in-game money.");
         ANSWER_MAP.put("how_to_get_spawners", "You can buy spawners on the [/store] or buy them off other players for in-game money.");
         ANSWER_MAP.put("how_to_get_title_points", "You can get Title Points from Crates or buy vouchers off other Players");
         ANSWER_MAP.put("how_to_get_ce", "You can get Custom Enchants in [/ce]. There you buy the different rarity's for different amounts of Xp. Of course, you are always able to buy Custom Enchants from other players.");
@@ -63,15 +64,20 @@ public class BetterFoxcraftClient implements ClientModInitializer {
         ANSWER_MAP.put("how_does_a_collector_work","A Collector collects items in its radius and puts the collected items into a chest. Depending on the Tier the radius is extended.");
         ANSWER_MAP.put("how_does_a_lumber_work","A Lumberjack mines Tree in its radius and put the wood inside a chest. Depending on the Tier the radius of the Lumber is extended.");
         ANSWER_MAP.put("how_to_vote","You can get Information about Voting here: https://www.mcfoxcraft.com/help/voting/");
+        ANSWER_MAP.put("how_do_crates_work","Only Vote Keys exist in physical form (sometimes also Pinata). All the other types of crates are stored in [/keys]. You can open a Crate by just clicking the chest of it (If you have the physical key you need to hold it).");
 
         ANSWER_MAP.put("what_is_pinata", "The Pinata is a Llama that spawns once 125 Votes have been made. It spawns at the Pvp Area which you can navigate to by running the command [/warp pvp]. If you hit it at least once you get a Pinata Key at the end which you can redeem at [/crates].");
         ANSWER_MAP.put("what_is_a_prestige", "You prestige whenever you mined through all [/ob phases]. Once you do so, you will get a Pinata Key and a Upgrade Point which you can spend in [/ob upgrades].");
         ANSWER_MAP.put("what_is_a_title_point", "In TAB you might see some people having a Custom Tag after their name. That is a 'Title' which you can get with a Title Point!");
         ANSWER_MAP.put("what_is_a_vote_point", "Whenever you vote you received a Vote Point. If you have gathered enough you can use them to crate a Giftcard for the [/store].");
+        ANSWER_MAP.put("what_is_a_backpack","A Backpack is an item which functions like a Shulker Box. However, the backpack does not need to be placed. Additionally, Backpacks can have different sizes.");
+        ANSWER_MAP.put("what_is_fish","The PyroFishing Plugin (/fish) is a fun plugin with which you can earn money by fishing.");
+        ANSWER_MAP.put("what_is_farm","The PyroFarming Plugin (/farm) is a fun plugin with which you can earn money by harvesting Bushes and planting seeds in Growstations. It does require some grind to earn a bunch of money.");
 
         ANSWER_MAP.put("free_stuff", "You can get free items at my Player Warp. To get there run the command: [/pwarp go DZultra]. Enter the Shop Area and look around to find free and cheap items. If you want to support my pwarp do [/like].");
         ANSWER_MAP.put("xp_farm", "You can go to my xp farm. Just run the command: [/pwarp go DZultra]. Enter the Xp Area and start killing some mobs.");
         ANSWER_MAP.put("is_litematica_allowed", "Yes, Litematica is allowed. However, you are not allowed to use the Easy Place Feature.");
+        ANSWER_MAP.put("helper","I am a Helper in terms of answering questions and doing simple moderation. Not helping to build or something similar.");
 
         ANSWER_MAP.put("guide", "https://www.mcfoxcraft.com/threads/a-comprehensive-oneblock-guide-pyrofarming.38325/");
         ANSWER_MAP.put("bug", "https://www.mcfoxcraft.com/forums/bug-reports.26/");
@@ -120,6 +126,25 @@ public class BetterFoxcraftClient implements ClientModInitializer {
                     })
             );
         }));
+        ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> {
+            dispatcher.register(
+                    literal("staffmode").executes(context -> {
+                        MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("gmsp");
+                        MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("fly enable");
+                        MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("vanish");
+                        MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("hide");
+                        return 0;
+                    })
+            );
+        }));
+        ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> {
+            dispatcher.register(
+                    literal("jackpot").executes(context -> {
+                        MinecraftClient.getInstance().player.sendMessage(Text.literal("\nYou should not gamble!\n").setStyle(Style.EMPTY.withColor(Formatting.RED).withBold(true)), false);
+                        return 0;
+                    })
+            );
+        }));
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
             dispatcher.register(ClientCommandManager.literal("oc")
                     .then(ClientCommandManager.argument("text", StringArgumentType.greedyString())
@@ -148,6 +173,25 @@ public class BetterFoxcraftClient implements ClientModInitializer {
             });
 
             dispatcher.register(answerCommand);
+        }));
+        registerGamblingWarningCommand("casino");
+        registerGamblingWarningCommand("rps");
+        registerGamblingWarningCommand("jackpot");
+        registerGamblingWarningCommand("cf");
+    }
+
+    private static void registerGamblingWarningCommand(String commandName) {
+        ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> {
+            dispatcher.register(
+                    literal(commandName).executes(context -> {
+                        MinecraftClient.getInstance().player.sendMessage(
+                                Text.literal("\nYou should not gamble!\n").setStyle(Style.EMPTY
+                                        .withColor(Formatting.RED)
+                                        .withBold(true))
+                                , false);
+                        return 0;
+                    })
+            );
         }));
     }
 
