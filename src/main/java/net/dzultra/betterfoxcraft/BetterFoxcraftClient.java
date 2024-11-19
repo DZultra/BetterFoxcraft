@@ -82,13 +82,13 @@ public class BetterFoxcraftClient implements ClientModInitializer {
         ANSWER_MAP.put("helper","I am a Helper in terms of answering questions and doing simple moderation. Not helping to build or something similar.");
 
         ANSWER_MAP.put("guide", "https://www.mcfoxcraft.com/threads/a-comprehensive-oneblock-guide-pyrofarming.38325/");
-        ANSWER_MAP.put("bug", "https://www.mcfoxcraft.com/forums/bug-reports.26/");
-        ANSWER_MAP.put("feedback", "https://feedback.foxcraft.net/");
-        ANSWER_MAP.put("suggestion", "https://feedback.foxcraft.net/");
-        ANSWER_MAP.put("appeal", "https://www.mcfoxcraft.com/forums/appeals.24/");
-        ANSWER_MAP.put("player", "https://www.mcfoxcraft.com/forums/player-reports.23/");
-        ANSWER_MAP.put("application", "https://www.mcfoxcraft.com/forums/staff-applications.27/");
-        ANSWER_MAP.put("payment", "https://www.mcfoxcraft.com/forums/donation-support.22/");
+        ANSWER_MAP.put("bug", "https://www.mcfoxcraft.com/form/bug-report.1/select");
+        ANSWER_MAP.put("feedback", "https://www.mcfoxcraft.com/forums/feedback-suggestions.25/");
+        ANSWER_MAP.put("suggestion", "https://www.mcfoxcraft.com/forums/feedback-suggestions.25/");
+        ANSWER_MAP.put("appeal", "https://www.mcfoxcraft.com/form/appeal.5/select");
+        ANSWER_MAP.put("player", "https://www.mcfoxcraft.com/form/report-player.4/select");
+        ANSWER_MAP.put("application", "https://www.mcfoxcraft.com/form/staff-application.6/select");
+        ANSWER_MAP.put("payment", "https://www.mcfoxcraft.com/form/customer-support.3/select");
         ANSWER_MAP.put("store", "https://store.foxcraft.net/");
         ANSWER_MAP.put("forums", "https://www.mcfoxcraft.com/");
         ANSWER_MAP.put("vote", "https://www.mcfoxcraft.com/help/voting/");
