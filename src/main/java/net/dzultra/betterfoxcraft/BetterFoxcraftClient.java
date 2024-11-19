@@ -110,16 +110,6 @@ public class BetterFoxcraftClient implements ClientModInitializer {
                                                 return 1;
                                             })))));
         });
-        ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> {
-            dispatcher.register(
-                    literal("start").executes(context -> {
-                        MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("redeem");
-                        MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("redeemkey");
-                        MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("daily");
-                        return 0;
-                    })
-            );
-        }));
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
             dispatcher.register(ClientCommandManager.literal("oc")
                     .then(ClientCommandManager.argument("text", StringArgumentType.greedyString())
