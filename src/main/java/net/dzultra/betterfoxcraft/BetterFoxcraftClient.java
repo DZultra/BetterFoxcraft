@@ -134,13 +134,21 @@ public class BetterFoxcraftClient implements ClientModInitializer {
 
         ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> {
             dispatcher.register(
-                    literal("staffmode").executes(context -> {
-                        MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("gmsp");
-                        MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("fly enable");
-                        MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("vanish");
-                        MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("hide");
-                        return 0;
-                    })
+                    literal("staffmode")
+                            .then(literal("enable").executes(context -> {
+                                MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("vanish");
+                                MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("hide");
+                                MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("gmsp");
+                                MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("fly enable");
+                                return 1;
+                            }))
+                            .then(literal("disable").executes(context -> {
+                                MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("vanish");
+                                MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("hide");
+                                MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("gms");
+                                MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("fly enable");
+                                return 1;
+                            }))
             );
         }));
 
