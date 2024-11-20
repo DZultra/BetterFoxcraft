@@ -6,6 +6,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.argument.EnumArgumentType;
 import net.minecraft.text.ClickEvent;
@@ -14,11 +15,15 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.Util;
 import net.suuft.libretranslate.Language;
 import net.suuft.libretranslate.Translator;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
@@ -26,7 +31,6 @@ public class BetterFoxcraftClient implements ClientModInitializer {
 
     public static final String FAQ_NOT_FOUND = "Could not find FAQ, please try a different one.";
     public static final HashMap<String, String> ANSWER_MAP = new HashMap<>();
-
     static {
         ANSWER_MAP.put("how_to_get_to_island", "You can navigate to your island by running either of the following commands: [/is] | [/ob].");
         ANSWER_MAP.put("how_to_get_to_spawn", "You can navigate to spawn by running to command: [/spawn].");
@@ -153,18 +157,30 @@ public class BetterFoxcraftClient implements ClientModInitializer {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
             dispatcher.register(ClientCommandManager.literal("oc")
                     .then(ClientCommandManager.argument("text", StringArgumentType.greedyString())
-                        .executes(context -> {
-                            String text = StringArgumentType.getString(context, "text");
-                            try {
-                                MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("ob chat " + text);
-                            } catch (IllegalArgumentException e) {
-                                System.out.println(e.getMessage());
-                                MinecraftClient.getInstance().player.sendMessage(Text.literal("Error Code: 1"), false);
-                            }
-                            return 1;
-                        })
+                            .executes(context -> {
+                                String text = StringArgumentType.getString(context, "text");
+                                try {
+                                    MinecraftClient client = MinecraftClient.getInstance();
+
+                                    client.getNetworkHandler().sendChatCommand("ob chat");
+
+                                    addDelayedTask(() -> {
+                                        client.player.networkHandler.sendChatMessage(text);
+
+                                        addDelayedTask(() -> client.getNetworkHandler().sendChatCommand("ob chat"), 10);
+                                    }, 10);
+                                } catch (IllegalArgumentException e) {
+                                    System.out.println(e.getMessage());
+                                    MinecraftClient.getInstance().player.sendMessage(Text.literal("Wrong Argument: Please use provide a Text to send!").setStyle(Style.EMPTY
+                                                    .withColor(Formatting.RED)
+                                                    .withBold(true))
+                                            , false);
+                                }
+                                return 1;
+                            })
                     ));
         });
+
 
         ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> {
             var answerCommand = literal("answer").executes(context -> {
@@ -215,6 +231,36 @@ public class BetterFoxcraftClient implements ClientModInitializer {
                     ), false);
             return 0;
         });
+    }
+
+    private static final List<DelayedTask> delayedTasks = new ArrayList<>();
+
+    private static void addDelayedTask(Runnable task, int delayTicks) {
+        delayedTasks.add(new DelayedTask(task, delayTicks));
+    }
+
+    static {
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            List<DelayedTask> tasksCopy = new ArrayList<>(delayedTasks);
+
+            for (DelayedTask delayedTask : tasksCopy) {
+                delayedTask.ticksLeft--;
+                if (delayedTask.ticksLeft <= 0) {
+                    delayedTask.task.run();
+                    delayedTasks.remove(delayedTask);
+                }
+            }
+        });
+    }
+
+    private static class DelayedTask {
+        private final Runnable task;
+        private int ticksLeft;
+
+        public DelayedTask(Runnable task, int ticksLeft) {
+            this.task = task;
+            this.ticksLeft = ticksLeft;
+        }
     }
 
     protected enum StaffState implements StringIdentifiable {
