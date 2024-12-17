@@ -136,14 +136,12 @@ public class BetterFoxcraftClient implements ClientModInitializer {
                     literal("staffmode")
                             .then(literal("enable").executes(context -> {
                                 MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("vanish");
-                                MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("hide");
                                 MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("gmsp");
                                 MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("fly enable");
                                 return 1;
                             }))
                             .then(literal("disable").executes(context -> {
                                 MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("vanish");
-                                MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("hide");
                                 MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("gms");
                                 MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("fly enable");
                                 return 1;
@@ -152,7 +150,7 @@ public class BetterFoxcraftClient implements ClientModInitializer {
         }));
 
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
-            dispatcher.register(ClientCommandManager.literal("oc")
+            dispatcher.register(ClientCommandManager.literal("obc")
                     .then(ClientCommandManager.argument("text", StringArgumentType.greedyString())
                             .executes(context -> {
                                 String text = StringArgumentType.getString(context, "text");
@@ -257,16 +255,6 @@ public class BetterFoxcraftClient implements ClientModInitializer {
         public DelayedTask(Runnable task, int ticksLeft) {
             this.task = task;
             this.ticksLeft = ticksLeft;
-        }
-    }
-
-    protected enum StaffState implements StringIdentifiable {
-        ENABLE,
-        DISABLE;
-
-        @Override
-        public String asString() {
-            return "enable/disable";
         }
     }
 }
