@@ -114,7 +114,7 @@ public class BetterFoxcraftClient implements ClientModInitializer {
                                             })))));
         });
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
-            dispatcher.register(ClientCommandManager.literal("oc")
+            dispatcher.register(ClientCommandManager.literal("obc")
                     .then(ClientCommandManager.argument("text", StringArgumentType.greedyString())
                             .executes(context -> {
                                 String text = StringArgumentType.getString(context, "text");
