@@ -27,7 +27,7 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	implementation 'net.clojars.suuft:libretranslate-java:1.0.5'
-
+	implementation 'com.squareup.okhttp3:okhttp:4.11.0'
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	
@@ -57,16 +57,15 @@ java {
 
 jar {
 	from("LICENSE") {
-		rename { "${it}_${project.base.archivesName.get()}"}
+		rename { "${it}_${project.base.archivesName.get()}" }
 	}
 	from {
-		configurations
-				.runtimeClasspath
-				.collect {
-					if(it.name.equalsIgnoreCase("libretranslate-java-1.0.5.jar")) {
-						zipTree(it)
-					}
-				}
+		configurations.runtimeClasspath.collect {
+			if (it.name.equalsIgnoreCase("libretranslate-java-1.0.5.jar") ||
+					it.name.equalsIgnoreCase("okhttp-4.11.0.jar")) {
+				zipTree(it)
+			}
+		}
 	}
 }
 
