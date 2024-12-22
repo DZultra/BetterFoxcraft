@@ -11,12 +11,16 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import okhttp3.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Base64;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -37,10 +41,9 @@ public class ImgurCommand {
         MinecraftClient client = MinecraftClient.getInstance();
         Path screenshotsDir = client.runDirectory.toPath().resolve("screenshots");
 
-        // Find latest Screenshot
         Optional<Path> latestScreenshot = getLatestScreenshot(screenshotsDir);
         if (latestScreenshot.isEmpty()) {
-            client.execute(() -> client.player.sendMessage(Text.literal("No screeenshot found"), false));
+            client.execute(() -> client.player.sendMessage(Text.literal("No screenshot found"), false));
             return 1;
         }
 
@@ -50,10 +53,10 @@ public class ImgurCommand {
             try {
                 String response = uploadToImgur(imageFile, title, description);
                 client.execute(() -> client.player.sendMessage(
-                        Text.literal("Image succesfully uploaded: " + response)
+                        Text.literal("Image successfully uploaded: " + response)
                                 .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, response)))
                 ));
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
                 client.execute(() -> client.player.sendMessage(Text.literal("Error while uploading: " + e.getMessage()), false));
                 e.printStackTrace();
             }
@@ -61,6 +64,7 @@ public class ImgurCommand {
 
         return 1;
     }
+
     private static Optional<Path> getLatestScreenshot(Path screenshotsDir) {
         try (Stream<Path> files = Files.list(screenshotsDir)) {
             return files
@@ -73,36 +77,39 @@ public class ImgurCommand {
         }
     }
 
-    private static String uploadToImgur(File imageFile, String title, String description) throws IOException {
-        OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
-                .writeTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
-                .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+    private static String uploadToImgur(File imageFile, String title, String description) throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newBuilder()
+                .connectTimeout(java.time.Duration.ofSeconds(30))
                 .build();
 
         byte[] imageBytes = Files.readAllBytes(imageFile.toPath());
-        String base64Image = java.util.Base64.getEncoder().encodeToString(imageBytes);
+        String base64Image = Base64.getEncoder().encodeToString(imageBytes);
 
-        RequestBody body = new FormBody.Builder()
-                .add("image", base64Image)
-                .add("title", title)
-                .add("description", description)
+        String boundary = "----ImgurBoundary" + System.currentTimeMillis();
+        String body = "--" + boundary + "\r\n" +
+                "Content-Disposition: form-data; name=\"image\"\r\n\r\n" + base64Image + "\r\n" +
+                "--" + boundary + "\r\n" +
+                "Content-Disposition: form-data; name=\"title\"\r\n\r\n" + title + "\r\n" +
+                "--" + boundary + "\r\n" +
+                "Content-Disposition: form-data; name=\"description\"\r\n\r\n" + description + "\r\n" +
+                "--" + boundary + "--\r\n";
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(IMGUR_UPLOAD_URL))
+                .header("Authorization", "Client-ID " + AutoConfig.getConfigHolder(ModConfig.class).getConfig().clientID)
+                .header("Content-Type", "multipart/form-data; boundary=" + boundary)
+                .POST(HttpRequest.BodyPublishers.ofString(body))
                 .build();
 
-        Request request = new Request.Builder()
-                .url(IMGUR_UPLOAD_URL)
-                .addHeader("Authorization", "Client-ID " + AutoConfig.getConfigHolder(ModConfig.class).getConfig().clientID)
-                .post(body)
-                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                System.err.println("Response Code: " + response.code());
-                System.err.println("Response Body: " + response.body().string());
-                throw new IOException("Unexpectected code: " + response);
-            }
-            String responseBody = response.body().string();
-            return parseImgurLink(responseBody);}
+        if (response.statusCode() != 200) {
+            System.err.println("Response Code: " + response.statusCode());
+            System.err.println("Response Body: " + response.body());
+            throw new IOException("Unexpected response code: " + response.statusCode());
+        }
+
+        return parseImgurLink(response.body());
     }
 
     private static String parseImgurLink(String responseBody) {
