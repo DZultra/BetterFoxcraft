@@ -8,7 +8,7 @@
 		"DZultra"
 	],
 	"license": "MIT",
-	"icon": "assets/betterfoxcraft/icon.jpg",
+	"icon": "assets/betterfoxcraft/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
