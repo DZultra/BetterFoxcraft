@@ -1,5 +1,6 @@
 package net.dzultra.betterfoxcraft.commands;
 
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -22,38 +23,40 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ImgurCommand {
-    private static final String IMGUR_UPLOAD_URL = "https://api.imgur.com/3/image";
+    private static final String IMGUR_UPLOAD_URL = "https://api.imgur.com/3/album";
 
     public static LiteralArgumentBuilder<FabricClientCommandSource> getCommand() {
         return ClientCommandManager.literal("imgur")
-                .then(ClientCommandManager.argument("title", StringArgumentType.string())
-                        .then(ClientCommandManager.argument("description", StringArgumentType.greedyString())
-                                .executes(context -> uploadScreenshot(context,
-                                        StringArgumentType.getString(context, "title"),
-                                        StringArgumentType.getString(context, "description")))));
+                .then(ClientCommandManager.argument("count", IntegerArgumentType.integer(1))
+                        .then(ClientCommandManager.argument("title", StringArgumentType.string())
+                                .then(ClientCommandManager.argument("description", StringArgumentType.greedyString())
+                                        .executes(context -> uploadScreenshots(context,
+                                                IntegerArgumentType.getInteger(context, "count"),
+                                                StringArgumentType.getString(context, "title"),
+                                                StringArgumentType.getString(context, "description"))))));
     }
 
-    private static int uploadScreenshot(CommandContext<?> context, String title, String description) {
+    private static int uploadScreenshots(CommandContext<?> context, int count, String title, String description) {
         MinecraftClient client = MinecraftClient.getInstance();
         Path screenshotsDir = client.runDirectory.toPath().resolve("screenshots");
 
-        Optional<Path> latestScreenshot = getLatestScreenshot(screenshotsDir);
-        if (latestScreenshot.isEmpty()) {
-            client.execute(() -> client.player.sendMessage(Text.literal("No screenshot found"), false));
+        List<Path> latestScreenshots = getLatestScreenshots(screenshotsDir, count);
+        if (latestScreenshots.isEmpty()) {
+            client.execute(() -> client.player.sendMessage(Text.literal("No screenshots found"), false));
             return 1;
         }
 
-        File imageFile = latestScreenshot.get().toFile();
-
         new Thread(() -> {
             try {
-                String response = uploadToImgur(imageFile, title, description);
+                String response = uploadToImgur(latestScreenshots, title, description);
                 client.execute(() -> client.player.sendMessage(
-                        Text.literal("Image successfully uploaded: " + response)
+                        Text.literal("Images successfully uploaded: " + response)
                                 .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, response)))
                 ));
             } catch (IOException | InterruptedException e) {
@@ -65,40 +68,50 @@ public class ImgurCommand {
         return 1;
     }
 
-    private static Optional<Path> getLatestScreenshot(Path screenshotsDir) {
+    private static List<Path> getLatestScreenshots(Path screenshotsDir, int count) {
         try (Stream<Path> files = Files.list(screenshotsDir)) {
             return files
                     .filter(Files::isRegularFile)
                     .filter(file -> file.toString().endsWith(".png"))
-                    .max(Comparator.comparingLong(file -> file.toFile().lastModified()));
+                    .sorted(Comparator.comparingLong(file -> -file.toFile().lastModified()))
+                    .limit(count)
+                    .collect(Collectors.toList());
         } catch (IOException e) {
             e.printStackTrace();
-            return Optional.empty();
+            return List.of();
         }
     }
 
-    private static String uploadToImgur(File imageFile, String title, String description) throws IOException, InterruptedException {
+    private static String uploadToImgur(List<Path> imageFiles, String title, String description) throws IOException, InterruptedException {
         HttpClient client = HttpClient.newBuilder()
                 .connectTimeout(java.time.Duration.ofSeconds(30))
                 .build();
 
-        byte[] imageBytes = Files.readAllBytes(imageFile.toPath());
-        String base64Image = Base64.getEncoder().encodeToString(imageBytes);
-
         String boundary = "----ImgurBoundary" + System.currentTimeMillis();
-        String body = "--" + boundary + "\r\n" +
-                "Content-Disposition: form-data; name=\"image\"\r\n\r\n" + base64Image + "\r\n" +
-                "--" + boundary + "\r\n" +
-                "Content-Disposition: form-data; name=\"title\"\r\n\r\n" + title + "\r\n" +
-                "--" + boundary + "\r\n" +
-                "Content-Disposition: form-data; name=\"description\"\r\n\r\n" + description + "\r\n" +
-                "--" + boundary + "--\r\n";
+        StringBuilder bodyBuilder = new StringBuilder();
+
+        for (int i = 0; i < imageFiles.size(); i++) {
+            byte[] imageBytes = Files.readAllBytes(imageFiles.get(i));
+            String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+
+            bodyBuilder.append("--").append(boundary).append("\r\n")
+                    .append("Content-Disposition: form-data; name=\"image\"\r\n\r\n")
+                    .append(base64Image).append("\r\n");
+        }
+
+        bodyBuilder.append("--").append(boundary).append("\r\n")
+                .append("Content-Disposition: form-data; name=\"title\"\r\n\r\n")
+                .append(title).append("\r\n")
+                .append("--").append(boundary).append("\r\n")
+                .append("Content-Disposition: form-data; name=\"description\"\r\n\r\n")
+                .append(description).append("\r\n")
+                .append("--").append(boundary).append("--\r\n");
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(IMGUR_UPLOAD_URL))
                 .header("Authorization", "Client-ID " + AutoConfig.getConfigHolder(ModConfig.class).getConfig().clientID)
                 .header("Content-Type", "multipart/form-data; boundary=" + boundary)
-                .POST(HttpRequest.BodyPublishers.ofString(body))
+                .POST(HttpRequest.BodyPublishers.ofString(bodyBuilder.toString()))
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
