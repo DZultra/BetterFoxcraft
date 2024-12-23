@@ -15,7 +15,7 @@ import java.util.List;
 
 public class IslandChatCommand {
     public static LiteralArgumentBuilder<FabricClientCommandSource> getCommand() {
-        return ClientCommandManager.literal("isc")
+        return ClientCommandManager.literal("ilsc")
                 .then(ClientCommandManager.argument("text", StringArgumentType.greedyString())
                         .executes(context -> {
                             String text = StringArgumentType.getString(context, "text");
