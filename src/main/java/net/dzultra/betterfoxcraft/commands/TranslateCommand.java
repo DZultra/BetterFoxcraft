@@ -8,6 +8,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.suuft.libretranslate.Language;
 import net.suuft.libretranslate.Translator;
 
@@ -25,7 +26,11 @@ public class TranslateCommand {
                                                 Language from = Language.valueOf(language_text.toUpperCase());
                                                 Language to = Language.valueOf(language_translate.toUpperCase());
                                                 String result = (Translator.translate(from, to, text));
-                                                MinecraftClient.getInstance().player.sendMessage(Text.literal(result).setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, result))), false);
+                                                MinecraftClient.getInstance().player.sendMessage(Text.literal("\nTranslation: " + result + "\n")
+                                                        .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, result))
+                                                                .withColor(Formatting.GOLD))
+                                                        , false);
+
                                             } catch (IllegalArgumentException e) {
                                                 System.out.println(e.getMessage());
                                                 MinecraftClient.getInstance().player.sendMessage(Text.literal("Can't recognize the language!"), false);
