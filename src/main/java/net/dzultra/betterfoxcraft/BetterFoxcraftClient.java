@@ -27,6 +27,7 @@ public class BetterFoxcraftClient implements ClientModInitializer {
             dispatcher.register(IslandChatCommand.getCommand());
             dispatcher.register(StaffChatAlternativeCommand.getCommand());
             dispatcher.register(StaffChatDisableCommand.getCommand());
+            dispatcher.register(RulesCommand.getCommand());
         }));
     }
 
