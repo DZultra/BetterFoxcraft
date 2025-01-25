@@ -86,6 +86,7 @@ public class AnswerCommand {
         ANSWER_MAP.put("store", "https://store.foxcraft.net/");
         ANSWER_MAP.put("forums", "https://www.mcfoxcraft.com/");
         ANSWER_MAP.put("vote", "https://www.mcfoxcraft.com/help/voting/");
+        ANSWER_MAP.put("afk", "AFK - If something happens ping me with @DZultra");
     }
 
     public static LiteralArgumentBuilder<FabricClientCommandSource> getCommand() {
