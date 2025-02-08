@@ -60,6 +60,7 @@ public class AnswerCommand {
         ANSWER_MAP.put("how_do_crates_work","Only Vote Keys exist in physical form (sometimes also Pinata). All the other types of crates are stored in [/keys]. You can open a Crate by just clicking the chest of it (If you have the physical key you need to hold it).");
         ANSWER_MAP.put("how_to_get_lava", "You can get free Water and Lava at my pwarp | Just run the command [/pwarp go DZultra] and look around to find the free Water and Lava!");
         ANSWER_MAP.put("how_to_get_water", "You can get free Water and Lava at my pwarp | Just run the command [/pwarp go DZultra] and look around to find the free Water and Lava!");
+        ANSWER_MAP.put("how_to_auction_items", "You can auction Items using [/auctions sell <price>] while holding the item you want to put up for auction in your main hand. Using [/ah sell] offer further ability for listing an item.");
 
         ANSWER_MAP.put("what_is_pinata", "The Pinata is a Llama that spawns once 125 Votes have been made. It spawns at the Pvp Area which you can navigate to by running the command [/warp pvp]. If you hit it at least once you get a Pinata Key at the end which you can redeem at [/crates].");
         ANSWER_MAP.put("what_is_a_prestige", "You prestige whenever you mined through all [/ob phases]. Once you do so, you will get a Pinata Key and a Upgrade Point which you can spend in [/ob upgrades].");
