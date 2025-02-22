@@ -45,7 +45,7 @@ public class AnswerCommand {
         ANSWER_MAP.put("how_to_display_item", "You can display an item by typing [i ] in chat while holding your desired item in your hand. Make sure to type it without the space. You can also display your inventory with [inv ] and applying the same logic.");
         ANSWER_MAP.put("how_to_display_inv", "You can display your inventory by typing [inv ] in chat. Make sure to type it without the space. You can also display and item with [i ] while holding your desired item in hand and applying the same logic.");
         ANSWER_MAP.put("how_to_get_upgrade_points", "You receive  one upgrade point for every Prestige you do. To achieve a Prestige you need to mine through all [/ob phases].");
-        ANSWER_MAP.put("how_to_get_increase_island_size", "You can increase your island size by mining your oneblock. For every two phases you complete your island gets bigger by one block in each direction. You can also spend money in [/ob upgrade] to increase island size.");
+        ANSWER_MAP.put("how_to_increase_island_size", "You can increase your island size by mining your oneblock. For every two phases you complete your island gets bigger by one block in each direction. You can also spend money in [/ob upgrade] to increase island size.");
         ANSWER_MAP.put("how_to_get_custom_color", "You can get different colors with MC Color Codes. For a full list, google 'MC Color Codes'.");
         ANSWER_MAP.put("how_to_get_island_points", "You receive one island points for [/ob upgrades] for every prestige you complete.");
         ANSWER_MAP.put("how_does_a_slayer_work", "A Slayer kills Mobs in its radius and puts their Loot into a Chest. Depending on the Tier the radius and the speed of killing gets faster.");
