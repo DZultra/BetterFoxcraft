@@ -70,18 +70,14 @@ public class ConditionsCommand {
                                 username = StringArgumentType.getString(context, "user");
                                 ConditionsData conditions = DataBaseManager.getInstance().getConditions(username);
 
-                                MutableText message1 = Text.literal("\n-- Conditions for " + username + " --\n")
-                                        .setStyle(Style.EMPTY.withColor(Formatting.AQUA));
-
-                                MutableText message2 = Text.literal("")
-                                        .setStyle(Style.EMPTY.withColor(Formatting.GREEN));;
+                                MutableText message = Text.literal("\n§b-- Conditions for " + username + " --\n")
+                                        .setStyle(Style.EMPTY.withColor(Formatting.FORMATTING_CODE_PREFIX));
 
                                 for (String listedCondition : conditions.conditions_list) {
-                                    message2.append(listedCondition).append("\n");
+                                    message.append("§a" + listedCondition).setStyle(Style.EMPTY.withColor(Formatting.FORMATTING_CODE_PREFIX)).append("\n");
                                 }
 
-                                MinecraftClient.getInstance().player.sendMessage(message1);
-                                MinecraftClient.getInstance().player.sendMessage(message2);
+                                MinecraftClient.getInstance().player.sendMessage(message);
                                 return 1;
                             })
                 ));
