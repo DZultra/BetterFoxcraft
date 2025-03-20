@@ -11,16 +11,7 @@ base {
 }
 
 repositories {
-	maven {
-		name = "clojars.org"
-		url = uri("https://repo.clojars.org")
-	}
-	maven {
-		url "https://maven.shedaniel.me/"
-	}
-	maven {
-		url "https://maven.terraformersmc.com/releases/"
-	}
+
 }
 
 fabricApi {
@@ -35,10 +26,6 @@ dependencies {
 	implementation 'net.clojars.suuft:libretranslate-java:1.0.5'
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	modApi("me.shedaniel.cloth:cloth-config-fabric:15.0.140") {
-		exclude(group: "net.fabricmc.fabric-api")
-	}
-	modApi "com.terraformersmc:modmenu:11.0.3"
 }
 
 processResources {
@@ -66,13 +53,6 @@ java {
 jar {
 	from("LICENSE") {
 		rename { "${it}_${project.base.archivesName.get()}" }
-	}
-	from {
-		configurations.runtimeClasspath.collect {
-			if (it.name.equalsIgnoreCase("libretranslate-java-1.0.5.jar")) {
-				zipTree(it)
-			}
-		}
 	}
 }
 
