@@ -1,5 +1,6 @@
 package net.dzultra.betterfoxcraft;
 
+import net.dzultra.betterfoxcraft.checker.LayerCheckerCommand;
 import net.dzultra.betterfoxcraft.commands.gambling.CasinoCommand;
 import net.dzultra.betterfoxcraft.commands.gambling.Coinflip2Command;
 import net.dzultra.betterfoxcraft.commands.gambling.CoinflipCommand;
@@ -16,6 +17,7 @@ public class BetterFoxcraftClient implements ClientModInitializer {
             dispatcher.register(CoinflipCommand.getCommand());
             dispatcher.register(RockPaperScissorsCommand.getCommand());
             dispatcher.register(Coinflip2Command.getCommand());
+            dispatcher.register(LayerCheckerCommand.getCommand(registryAccess));
         }));
     }
 
