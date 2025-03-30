@@ -23,7 +23,7 @@ public class ConditionsCommand {
                 .then(literal("add").executes(context -> {
                     MinecraftClient.getInstance().player.sendMessage(
                             Text.literal("Please use /conditon add <user> <text>")
-                                    .setStyle(Style.EMPTY.withColor(Formatting.RED)));
+                                    .setStyle(Style.EMPTY.withColor(Formatting.RED)), false);
                     return 1;
                 }).then(ClientCommandManager.argument("user", StringArgumentType.string())
                         .then(ClientCommandManager.argument("text", StringArgumentType.greedyString())
@@ -31,8 +31,9 @@ public class ConditionsCommand {
                                     username = StringArgumentType.getString(context, "user");
                                     condition = StringArgumentType.getString(context, "text");
                                     DataBaseManager.getInstance().appendConditions(username, condition);
-                                    MinecraftClient.getInstance().player.sendMessage(Text.literal("\nSuccessfully added Condition '" + condition + "' for " + username + "\n")
-                                            .setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
+                                    MinecraftClient.getInstance().player.sendMessage(
+                                            Text.literal("\nSuccessfully added Condition '" + condition + "' for " + username + "\n")
+                                                .setStyle(Style.EMPTY.withColor(Formatting.GREEN)),false);
                                     return 1;
                                 })
                         )
@@ -41,7 +42,7 @@ public class ConditionsCommand {
                 .then(literal("remove").executes(context -> {
                     MinecraftClient.getInstance().player.sendMessage(
                             Text.literal("Please use /conditon remove <user> <index>")
-                                    .setStyle(Style.EMPTY.withColor(Formatting.RED)));
+                                    .setStyle(Style.EMPTY.withColor(Formatting.RED)), false);
                     return 1;
                 }).then(ClientCommandManager.argument("user", StringArgumentType.string())
                         .then(ClientCommandManager.argument("index", IntegerArgumentType.integer())
@@ -50,10 +51,10 @@ public class ConditionsCommand {
                                     index = IntegerArgumentType.getInteger(context, "index");
                                     if (DataBaseManager.getInstance().removeCondition(username, index-1)) {
                                         MinecraftClient.getInstance().player.sendMessage(Text.literal("\nSuccessfully removed Condition with Index: " + index + "\n")
-                                                .setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
+                                                .setStyle(Style.EMPTY.withColor(Formatting.GREEN)), false);
                                     } else {
                                         MinecraftClient.getInstance().player.sendMessage(Text.literal("\nIndex out of Bound!\n")
-                                                .setStyle(Style.EMPTY.withColor(Formatting.RED)));
+                                                .setStyle(Style.EMPTY.withColor(Formatting.RED)), false);
                                     }
                                     return 1;
                                 })
@@ -63,7 +64,7 @@ public class ConditionsCommand {
                 .then(literal("get").executes(context -> {
                     MinecraftClient.getInstance().player.sendMessage(
                             Text.literal("Please use /conditon get <user>")
-                                    .setStyle(Style.EMPTY.withColor(Formatting.RED)));
+                                    .setStyle(Style.EMPTY.withColor(Formatting.RED)), false);
                     return 1;
                 }).then(ClientCommandManager.argument("user", StringArgumentType.string())
                             .executes(context -> {
@@ -77,7 +78,7 @@ public class ConditionsCommand {
                                     message.append("§a" + listedCondition).setStyle(Style.EMPTY.withColor(Formatting.FORMATTING_CODE_PREFIX)).append("\n");
                                 }
 
-                                MinecraftClient.getInstance().player.sendMessage(message);
+                                MinecraftClient.getInstance().player.sendMessage(message, false);
                                 return 1;
                             })
                 ));

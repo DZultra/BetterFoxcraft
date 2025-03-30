@@ -77,8 +77,7 @@ public class DurationCommand {
                 durationMessage = Text.literal("\n|- Could not find duration -|\n");
             }
             MinecraftClient.getInstance().player.sendMessage(durationMessage
-                    .setStyle(Style.EMPTY.withColor(Formatting.GOLD))
-                    );
+                    .setStyle(Style.EMPTY.withColor(Formatting.GOLD)), false);
             return 0;
         });
     }

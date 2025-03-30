@@ -55,7 +55,7 @@ public class ImgurCommand {
                 String response = uploadToImgur(imageFile, title, description);
                 client.execute(() -> client.player.sendMessage(
                         Text.literal("Image successfully uploaded: " + response)
-                                .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, response)))
+                                .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, response))), false
                 ));
             } catch (IOException | InterruptedException e) {
                 client.execute(() -> client.player.sendMessage(Text.literal("Error while uploading: " + e.getMessage()), false));
