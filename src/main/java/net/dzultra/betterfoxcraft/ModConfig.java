@@ -9,6 +9,6 @@ public class ModConfig implements ConfigData {
     public Integer maxMissingBlocks = 20;
     public Integer maxRadius = 100;
     public Integer totalSeconds = 10;
-    public Integer ticks_between_updates = 40;
+    public Integer ticks_between_updates = 1;
     public Boolean enableParticleTracker = true;
 }
