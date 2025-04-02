@@ -6,7 +6,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.registry.Registries;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -14,10 +13,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class LayerChecker {
-    public static void checkLayer(String nameOfBlockToCheckFor,Block blockToCheck, int radius, BlockPos centerPos) {
-        MinecraftClient.getInstance().player.sendMessage(Text.literal("\n--- Layer Check Start ---\n")
-                .setStyle(Style.EMPTY.withColor(Formatting.GOLD)), false
-        );
+    public static Block currentBlockToCheck;
+
+    public static void checkLayer(String nameOfBlockToCheckFor, Block blockToCheck, int radius, BlockPos centerPos) {
+        currentBlockToCheck = blockToCheck;
+        String startMessage = "\n--- Layer Check Start ---\n";
+        sendMessage(startMessage, Formatting.GOLD);
 
         World world = MinecraftClient.getInstance().player.getWorld();
         boolean allBlocks = true;
@@ -50,9 +51,14 @@ public class LayerChecker {
 
                         String unpackedBlock = " (X: " + currentPos.getX() + " | Y: " + currentPos.getY() + " | Z: " + currentPos.getZ() + ")";
                         String wrongBlock = Registries.BLOCK.getId(world.getBlockState(currentPos).getBlock()).toString();
-                        MinecraftClient.getInstance().player.sendMessage(Text.literal("Missing Block at " + unpackedBlock + " --> " + wrongBlock)
-                                .setStyle(Style.EMPTY.withColor(Formatting.RED)), false
-                        );
+                        String message = "Missing Block at " + unpackedBlock + " --> " + wrongBlock;
+
+                        sendMessage(message, Formatting.RED);
+
+                        // Only spawn particles if we're under the max missing blocks limit
+                        if (missingBlocks < maxMissingBlocks) {
+                            ParticleTracker.addPosition(currentPos);
+                        }
                     }
                 }
                 if (missingBlocks >= maxMissingBlocks) {
@@ -60,16 +66,11 @@ public class LayerChecker {
                 }
             }
             if (missingBlocks >= maxMissingBlocks) {
-                Text message1 = Text.literal(
-                        "\nThe LayerCheck has been canceled because there can have been more than " + maxMissingBlocks + " missing Blocks detected to avoid spam.\n"
-                ).setStyle(Style.EMPTY.withColor(Formatting.DARK_RED));
+                String message1 = "\nThe LayerCheck has been canceled because there can have been more than " + maxMissingBlocks + " missing Blocks detected to avoid spam.\n";
+                String message2 = "\nThis value can be configured in the Settings!\n";
 
-                Text message2 = Text.literal(
-                        "\nThis value can be configured in the Settings!\n"
-                ).setStyle(Style.EMPTY.withColor(Formatting.GREEN));
-
-                MinecraftClient.getInstance().player.sendMessage(message1, false);
-                MinecraftClient.getInstance().player.sendMessage(message2, false);
+                sendMessage(message1, Formatting.DARK_RED);
+                sendMessage(message2, Formatting.GREEN);
                 break;
             }
         }
@@ -83,15 +84,11 @@ public class LayerChecker {
 
     private static void onAllCarrots(BlockPos center, String nameOfBlockToCheckFor,int radius) {
         String block = "Block X: " + center.getX() + " Y: " + center.getY() + " Z: " + center.getZ();
+        String message1 = "\nAll blocks within radius of " + radius + " from " + block + " are " + nameOfBlockToCheckFor + "!\n";
+        String message2 = "\n--- Layer Check End ---\n";
+        sendMessage(message1, Formatting.GREEN);
+        sendMessage(message2, Formatting.GOLD);
 
-        MinecraftClient.getInstance().player.sendMessage(
-                Text.literal("\nAll blocks within radius of " + radius + " from " + block + " are " + nameOfBlockToCheckFor + "!\n")
-                        .setStyle(Style.EMPTY.withColor(Formatting.GREEN)), false
-        );
-
-        MinecraftClient.getInstance().player.sendMessage(Text.literal("\n--- Layer Check End ---\n")
-                .setStyle(Style.EMPTY.withColor(Formatting.GOLD)), false
-        );
     }
 
     private static void onMissingCarrots(BlockPos center, String nameOfBlockToCheckFor,int radius, int missingCount, int maxMissingBlocks) {
@@ -100,14 +97,21 @@ public class LayerChecker {
 
         } else {
             String block = "Block X: " + center.getX() + " Y: " + center.getY() + " Z: " + center.getZ();
-            MinecraftClient.getInstance().player.sendMessage(
-                    Text.literal("\n" + missingCount + " non-" + nameOfBlockToCheckFor + " blocks found within radius of " + radius + " from " + block)
-                            .setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)), false
-            );
+            String message1 = "\n" + missingCount + " non-" + nameOfBlockToCheckFor + " blocks found within radius of " + radius + " from " + block;
+            sendMessage(message1, Formatting.DARK_RED);
         }
 
-        MinecraftClient.getInstance().player.sendMessage(Text.literal("\n--- Layer Check End ---\n")
-                .setStyle(Style.EMPTY.withColor(Formatting.GOLD)), false
-        );
+        String message2 = "\n--- Layer Check End ---\n";
+        sendMessage(message2, Formatting.GOLD);
+    }
+
+
+    protected static void sendMessage(String message, Formatting color) {
+        Text messageWithColor = Text.literal(message).setStyle(Style.EMPTY.withColor(color));
+        MinecraftClient.getInstance().player.sendMessage(messageWithColor, false);
+    }
+    protected static void sendMessage(String message, Formatting color, boolean bold) {
+        Text messageWithColor = Text.literal(message).setStyle(Style.EMPTY.withColor(color).withBold(bold));
+        MinecraftClient.getInstance().player.sendMessage(messageWithColor, false);
     }
 }

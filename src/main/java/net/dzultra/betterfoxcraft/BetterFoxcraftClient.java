@@ -2,6 +2,7 @@ package net.dzultra.betterfoxcraft;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
+import net.dzultra.betterfoxcraft.checker.ClientTickHandler;
 import net.dzultra.betterfoxcraft.checker.LayerCheckerCommand;
 import net.dzultra.betterfoxcraft.commands.*;
 import net.dzultra.betterfoxcraft.commands.conditions.ConditionsCommand;
@@ -11,7 +12,6 @@ import net.dzultra.betterfoxcraft.commands.gambling.CoinflipCommand;
 import net.dzultra.betterfoxcraft.commands.gambling.RockPaperScissorsCommand;
 import net.dzultra.betterfoxcraft.keybinds.KeybindHandler;
 import net.dzultra.betterfoxcraft.keybinds.ModKeyBinds;
-import net.dzultra.betterfoxcraft.other.ModSpectatorTracer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 
@@ -39,9 +39,8 @@ public class BetterFoxcraftClient implements ClientModInitializer {
             dispatcher.register(ConditionsCommand.getCommand());
             dispatcher.register(LayerCheckerCommand.getCommand(registryAccess));
         }));
-        ModSpectatorTracer.getSpectatorTracer();
+        ClientTickHandler.register();
         ModKeyBinds.register();
         KeybindHandler.register();
     }
-
 }

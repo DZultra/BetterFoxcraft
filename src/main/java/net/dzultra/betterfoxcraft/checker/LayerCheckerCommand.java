@@ -9,11 +9,8 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.registry.Registries;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -49,33 +46,26 @@ public class LayerCheckerCommand {
         int maxRadius = AutoConfig.getConfigHolder(ModConfig.class).getConfig().maxRadius;
 
         if (radius > maxRadius) {
-            MinecraftClient.getInstance().player.sendMessage(Text.literal("\n--- Layer Check Start ---\n")
-                    .setStyle(Style.EMPTY.withColor(Formatting.GOLD)), false
-            );
+            String message1 = "\n--- Layer Check Start ---\n";
+            String message2 = "Radius out of bound: Cannot be bigger than " + maxRadius;
+            String message3 = "\n--- Layer Check End ---\n";
 
-            MinecraftClient.getInstance().player.sendMessage(Text.literal("Radius out of bound: Cannot be bigger than " + maxRadius)
-                    .setStyle(Style.EMPTY.withColor(Formatting.RED)), false
-            );
+            LayerChecker.sendMessage(message1, Formatting.GOLD);
+            LayerChecker.sendMessage(message2, Formatting.RED);
+            LayerChecker.sendMessage(message3, Formatting.GOLD);
 
-            MinecraftClient.getInstance().player.sendMessage(Text.literal("\n--- Layer Check End ---\n")
-                    .setStyle(Style.EMPTY.withColor(Formatting.GOLD)), false
-            );
             return 1;
         }
 
         // If the block doesn't exist in the registry
         if (blockToCheck == Blocks.AIR && !nameOfBlockToCheckFor.equals("minecraft:air")) {
-            MinecraftClient.getInstance().player.sendMessage(Text.literal("\n--- Layer Check Start ---\n")
-                    .setStyle(Style.EMPTY.withColor(Formatting.GOLD)), false
-            );
+            String message1 = "\n--- Layer Check Start ---\n";
+            String message2 = "Block does not exist: " + nameOfBlockToCheckFor;
+            String message3 = "\n--- Layer Check End ---\n";
 
-            MinecraftClient.getInstance().player.sendMessage(Text.literal("Block does not exist: " + nameOfBlockToCheckFor)
-                    .setStyle(Style.EMPTY.withColor(Formatting.RED)), false
-            );
-
-            MinecraftClient.getInstance().player.sendMessage(Text.literal("\n--- Layer Check End ---\n")
-                    .setStyle(Style.EMPTY.withColor(Formatting.GOLD)), false
-            );
+            LayerChecker.sendMessage(message1, Formatting.GOLD);
+            LayerChecker.sendMessage(message2, Formatting.RED);
+            LayerChecker.sendMessage(message3, Formatting.GOLD);
 
             return 1;
         }

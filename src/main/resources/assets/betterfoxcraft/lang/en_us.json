@@ -4,5 +4,8 @@
   "text.autoconfig.betterfoxcraft.title": "BetterFoxcraft Settings",
   "text.autoconfig.betterfoxcraft.option.clientID": "API Key/ID for Imgur Command",
   "text.autoconfig.betterfoxcraft.option.maxMissingBlocks": "Max missing blocks before LayerCheck cancels",
-  "text.autoconfig.betterfoxcraft.option.maxRadius": "Max radius for LayerCheck that can be set"
+  "text.autoconfig.betterfoxcraft.option.maxRadius": "Max radius for LayerCheck that can be set",
+  "text.autoconfig.betterfoxcraft.option.totalSeconds": "Amount of Seconds the LayerChecker Visualization lasts",
+  "text.autoconfig.betterfoxcraft.option.ticks_between_updates": "Amount of Ticks between the Visualization Particles Spawning",
+  "text.autoconfig.betterfoxcraft.option.enableParticleTracker": "Enable/Disable Visualization of LayerChecker"
 }
