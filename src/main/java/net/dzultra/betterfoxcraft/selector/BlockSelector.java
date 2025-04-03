@@ -18,7 +18,6 @@ import net.minecraft.world.World;
 public class BlockSelector {
     public static BlockPos selectedBlockPos = null;
     public static Block selectedBlock = null;
-    protected static boolean hasSelection;
 
     public static void getBlockSelector(){
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -41,12 +40,10 @@ public class BlockSelector {
                     // Deselect if clicking the same block
                     selectedBlockPos = null;
                     selectedBlock = null;
-                    hasSelection = false;
                 } else {
                     // Select new block
                     selectedBlockPos = pos;
                     selectedBlock = state.getBlock();
-                    hasSelection = true;
                 }
             }
             return ActionResult.PASS;
@@ -115,6 +112,6 @@ public class BlockSelector {
     }
 
     public static boolean hasSelection() {
-        return hasSelection;
+        return selectedBlock != null;
     }
 }
