@@ -55,6 +55,11 @@ public class BlockSelector {
         World world = client.world;
 
         if (world == null) return;
+        if (!AutoConfig.getConfigHolder(ModConfig.class).getConfig().enableBlockSelector) {
+            selectedBlockPos = null;
+            selectedBlock = null;
+            return;
+        }
 
         // Use GLOW particles - they're brighter and more visible than WAX_ON
         ParticleEffect particleType = ParticleTypes.WAX_ON;
