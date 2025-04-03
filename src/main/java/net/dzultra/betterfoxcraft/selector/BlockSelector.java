@@ -63,7 +63,7 @@ public class BlockSelector {
         ParticleEffect particleType = ParticleTypes.WAX_ON;
 
         // Make the box slightly bigger (0.1 blocks outside the block)
-        final double BOX_OFFSET = 0.1;
+        double BOX_OFFSET = AutoConfig.getConfigHolder(ModConfig.class).getConfig().boxOffset;
         double minX = pos.getX() - BOX_OFFSET;
         double minY = pos.getY() - BOX_OFFSET;
         double minZ = pos.getZ() - BOX_OFFSET;

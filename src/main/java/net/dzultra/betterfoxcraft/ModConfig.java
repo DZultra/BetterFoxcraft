@@ -12,4 +12,5 @@ public class ModConfig implements ConfigData {
     public Integer ticks_between_updates = 1;
     public Boolean enableParticleTracker = true;
     public Boolean enableBlockSelector = false;
+    public Double boxOffset = 0.05;
 }
