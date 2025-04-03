@@ -2,6 +2,7 @@ package net.dzultra.betterfoxcraft.checker;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import net.dzultra.betterfoxcraft.ModConfig;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.particle.ParticleEffect;
@@ -37,6 +38,14 @@ public class ParticleTracker {
             entry.setValue(remainingTicks);
             spawnParticlesForPosition(entry.getKey(), blockToCheck);
             return false;
+        });
+    }
+
+    public static void getParticleTracker() {
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            if (client.world != null && client.player != null && AutoConfig.getConfigHolder(ModConfig.class).getConfig().enableParticleTracker) {
+                ParticleTracker.tick(LayerChecker.currentBlockToCheck);
+            }
         });
     }
 

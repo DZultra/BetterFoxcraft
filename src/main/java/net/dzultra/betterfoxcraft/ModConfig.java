@@ -11,4 +11,5 @@ public class ModConfig implements ConfigData {
     public Integer totalSeconds = 10;
     public Integer ticks_between_updates = 1;
     public Boolean enableParticleTracker = true;
+    public Boolean enableBlockSelector = false;
 }
