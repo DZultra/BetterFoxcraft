@@ -2,10 +2,7 @@ package net.dzultra.betterfoxcraft;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
-import net.dzultra.betterfoxcraft.checker.ClientTickHandler;
-import net.dzultra.betterfoxcraft.checker.LayerCheckerCommand;
 import net.dzultra.betterfoxcraft.commands.*;
-import net.dzultra.betterfoxcraft.commands.conditions.ConditionsCommand;
 import net.dzultra.betterfoxcraft.commands.gambling.CasinoCommand;
 import net.dzultra.betterfoxcraft.commands.gambling.Coinflip2Command;
 import net.dzultra.betterfoxcraft.commands.gambling.CoinflipCommand;
@@ -28,18 +25,10 @@ public class BetterFoxcraftClient implements ClientModInitializer {
             dispatcher.register(AnswerCommand.getCommand());
             dispatcher.register(ImgurCommand.getCommand());
             dispatcher.register(OneblockChatCommand.getCommand());
-            dispatcher.register(StaffmodeCommand.getCommand());
             dispatcher.register(StartCommand.getCommand());
-            dispatcher.register(TranslateCommand.getCommand());
-            dispatcher.register(IslandChatCommand.getCommand());
-            dispatcher.register(StaffChatAlternativeCommand.getCommand());
-            dispatcher.register(StaffChatDisableCommand.getCommand());
             dispatcher.register(RulesCommand.getCommand());
             dispatcher.register(DurationCommand.getCommand());
-            dispatcher.register(ConditionsCommand.getCommand());
-            dispatcher.register(LayerCheckerCommand.getCommand(registryAccess));
         }));
-        ClientTickHandler.register();
         ModKeyBinds.register();
         KeybindHandler.register();
     }
