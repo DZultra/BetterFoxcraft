@@ -11,6 +11,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +28,7 @@ import java.util.stream.Stream;
 
 public class ImgurCommand {
     private static final String IMGUR_UPLOAD_URL = "https://api.imgur.com/3/image";
-
+    public static String latestGeneratedImgurLink = "None";
     public static LiteralArgumentBuilder<FabricClientCommandSource> getCommand() {
         return ClientCommandManager.literal("imgur")
                 .then(ClientCommandManager.argument("title", StringArgumentType.string())
@@ -41,6 +42,9 @@ public class ImgurCommand {
         MinecraftClient client = MinecraftClient.getInstance();
         Path screenshotsDir = client.runDirectory.toPath().resolve("screenshots");
 
+        client.player.sendMessage(Text.literal("Uploading Screenshot to Imgur. This can take a few seconds")
+                .setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
+
         // Find latest Screenshot
         Optional<Path> latestScreenshot = getLatestScreenshot(screenshotsDir);
         if (latestScreenshot.isEmpty()) {
@@ -53,6 +57,7 @@ public class ImgurCommand {
         new Thread(() -> {
             try {
                 String response = uploadToImgur(imageFile, title, description);
+                latestGeneratedImgurLink = response;
                 client.execute(() -> client.player.sendMessage(
                         Text.literal("Image successfully uploaded: " + response)
                                 .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, response))), false
@@ -78,7 +83,7 @@ public class ImgurCommand {
         }
     }
 
-    private static String uploadToImgur(File imageFile, String title, String description) throws IOException, InterruptedException {
+    protected static String uploadToImgur(File imageFile, String title, String description) throws IOException, InterruptedException {
         HttpClient client = HttpClient.newBuilder()
                 .connectTimeout(java.time.Duration.ofSeconds(30))
                 .build();

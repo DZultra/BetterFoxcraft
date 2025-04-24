@@ -13,12 +13,14 @@ public class StaffmodeCommand {
                     MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("vanish");
                     MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("gmsp");
                     MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("fly enable");
+                    MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("hide");
                     return 1;
                 }))
                 .then(literal("disable").executes(context -> {
                     MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("vanish");
                     MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("gms");
                     MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("fly enable");
+                    MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("hide");
                     return 1;
                 }));
     }

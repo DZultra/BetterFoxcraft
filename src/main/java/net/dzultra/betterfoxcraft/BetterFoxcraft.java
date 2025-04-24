@@ -1,5 +1,6 @@
 package net.dzultra.betterfoxcraft;
 
+import net.dzultra.betterfoxcraft.discord.DiscordBotManager;
 import net.fabricmc.api.ModInitializer;
 
 import org.slf4j.Logger;
