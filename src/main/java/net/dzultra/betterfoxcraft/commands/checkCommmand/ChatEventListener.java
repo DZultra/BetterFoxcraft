@@ -1,6 +1,5 @@
-package net.dzultra.betterfoxcraft.checkCommmand;
+package net.dzultra.betterfoxcraft.commands.checkCommmand;
 
-import net.dzultra.betterfoxcraft.BetterFoxcraft;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 

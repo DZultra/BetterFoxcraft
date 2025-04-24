@@ -1,4 +1,4 @@
-package net.dzultra.betterfoxcraft.checkCommmand;
+package net.dzultra.betterfoxcraft.commands.checkCommmand;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;

@@ -3,7 +3,8 @@
 	"package": "net.dzultra.betterfoxcraft.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"ExampleMixin"
+		"GameMenuScreenMixin",
+		"ScreenAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1

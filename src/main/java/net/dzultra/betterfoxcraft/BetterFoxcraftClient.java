@@ -2,8 +2,8 @@ package net.dzultra.betterfoxcraft;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
-import net.dzultra.betterfoxcraft.checkCommmand.ChatEventListener;
-import net.dzultra.betterfoxcraft.checkCommmand.CheckCommand;
+import net.dzultra.betterfoxcraft.commands.checkCommmand.ChatEventListener;
+import net.dzultra.betterfoxcraft.commands.checkCommmand.CheckCommand;
 import net.dzultra.betterfoxcraft.checker.ClientTickHandler;
 import net.dzultra.betterfoxcraft.checker.LayerCheckerCommand;
 import net.dzultra.betterfoxcraft.commands.*;
