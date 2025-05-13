@@ -43,7 +43,7 @@ public class ImgurCommand {
         Path screenshotsDir = client.runDirectory.toPath().resolve("screenshots");
 
         client.player.sendMessage(Text.literal("Uploading Screenshot to Imgur. This can take a few seconds")
-                .setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
+                .setStyle(Style.EMPTY.withColor(Formatting.GREEN)), false);
 
         // Find latest Screenshot
         Optional<Path> latestScreenshot = getLatestScreenshot(screenshotsDir);
