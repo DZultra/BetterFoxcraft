@@ -2,6 +2,8 @@ package net.dzultra.betterfoxcraft;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
+import net.dzultra.betterfoxcraft.checker.ClientTickHandler;
+import net.dzultra.betterfoxcraft.checker.LayerCheckerCommand;
 import net.dzultra.betterfoxcraft.commands.*;
 import net.dzultra.betterfoxcraft.commands.gambling.CasinoCommand;
 import net.dzultra.betterfoxcraft.commands.gambling.Coinflip2Command;
@@ -28,8 +30,10 @@ public class BetterFoxcraftClient implements ClientModInitializer {
             dispatcher.register(StartCommand.getCommand());
             dispatcher.register(RulesCommand.getCommand());
             dispatcher.register(DurationCommand.getCommand());
+            dispatcher.register(LayerCheckerCommand.getCommand(registryAccess));
         }));
         ModKeyBinds.register();
         KeybindHandler.register();
+        ClientTickHandler.register();
     }
 }
