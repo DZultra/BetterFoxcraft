@@ -83,37 +83,37 @@ public class BlockSelector {
             double zPos = minZ + (maxZ - minZ) * edgePos;
 
             // Bottom edges
-            world.addParticle(particleType, xPos, minY, minZ, 0, 0, 0);
-            world.addParticle(particleType, minX, minY, zPos, 0, 0, 0);
-            world.addParticle(particleType, xPos, minY, maxZ, 0, 0, 0);
-            world.addParticle(particleType, maxX, minY, zPos, 0, 0, 0);
+            world.addParticleClient(particleType, xPos, minY, minZ, 0, 0, 0);
+            world.addParticleClient(particleType, minX, minY, zPos, 0, 0, 0);
+            world.addParticleClient(particleType, xPos, minY, maxZ, 0, 0, 0);
+            world.addParticleClient(particleType, maxX, minY, zPos, 0, 0, 0);
 
             // Top edges
-            world.addParticle(particleType, xPos, maxY, minZ, 0, 0, 0);
-            world.addParticle(particleType, minX, maxY, zPos, 0, 0, 0);
-            world.addParticle(particleType, xPos, maxY, maxZ, 0, 0, 0);
-            world.addParticle(particleType, maxX, maxY, zPos, 0, 0, 0);
+            world.addParticleClient(particleType, xPos, maxY, minZ, 0, 0, 0);
+            world.addParticleClient(particleType, minX, maxY, zPos, 0, 0, 0);
+            world.addParticleClient(particleType, xPos, maxY, maxZ, 0, 0, 0);
+            world.addParticleClient(particleType, maxX, maxY, zPos, 0, 0, 0);
         }
 
         // Vertical edges (more of them at different heights)
         for (double heightPos : heightPositions) {
             double yPos = minY + (maxY - minY) * heightPos;
 
-            world.addParticle(particleType, minX, yPos, minZ, 0, 0, 0);
-            world.addParticle(particleType, maxX, yPos, minZ, 0, 0, 0);
-            world.addParticle(particleType, minX, yPos, maxZ, 0, 0, 0);
-            world.addParticle(particleType, maxX, yPos, maxZ, 0, 0, 0);
+            world.addParticleClient(particleType, minX, yPos, minZ, 0, 0, 0);
+            world.addParticleClient(particleType, maxX, yPos, minZ, 0, 0, 0);
+            world.addParticleClient(particleType, minX, yPos, maxZ, 0, 0, 0);
+            world.addParticleClient(particleType, maxX, yPos, maxZ, 0, 0, 0);
         }
 
         // Corner particles for better definition
-        world.addParticle(particleType, minX, minY, minZ, 0, 0, 0);
-        world.addParticle(particleType, maxX, minY, minZ, 0, 0, 0);
-        world.addParticle(particleType, minX, minY, maxZ, 0, 0, 0);
-        world.addParticle(particleType, maxX, minY, maxZ, 0, 0, 0);
-        world.addParticle(particleType, minX, maxY, minZ, 0, 0, 0);
-        world.addParticle(particleType, maxX, maxY, minZ, 0, 0, 0);
-        world.addParticle(particleType, minX, maxY, maxZ, 0, 0, 0);
-        world.addParticle(particleType, maxX, maxY, maxZ, 0, 0, 0);
+        world.addParticleClient(particleType, minX, minY, minZ, 0, 0, 0);
+        world.addParticleClient(particleType, maxX, minY, minZ, 0, 0, 0);
+        world.addParticleClient(particleType, minX, minY, maxZ, 0, 0, 0);
+        world.addParticleClient(particleType, maxX, minY, maxZ, 0, 0, 0);
+        world.addParticleClient(particleType, minX, maxY, minZ, 0, 0, 0);
+        world.addParticleClient(particleType, maxX, maxY, minZ, 0, 0, 0);
+        world.addParticleClient(particleType, minX, maxY, maxZ, 0, 0, 0);
+        world.addParticleClient(particleType, maxX, maxY, maxZ, 0, 0, 0);
     }
 
     public static boolean hasSelection() {

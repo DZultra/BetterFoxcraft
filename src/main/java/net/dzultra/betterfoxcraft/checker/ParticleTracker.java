@@ -69,22 +69,23 @@ public class ParticleTracker {
         // Horizontal edges (top and bottom)
         for (double edgePos : edgePositions) {
             // Bottom edges
-            world.addParticle(particleType, x + edgePos, y,     z,     0, 0, 0); // Front
-            world.addParticle(particleType, x,     y,     z + edgePos, 0, 0, 0); // Right
-            world.addParticle(particleType, x + edgePos, y,     z + 1, 0, 0, 0); // Back
-            world.addParticle(particleType, x + 1, y,     z + edgePos, 0, 0, 0); // Left
+            world.addParticleClient(particleType, x + edgePos, y,     z,     0, 0, 0); // Front
+            world.addParticleClient(particleType, x,     y,     z + edgePos, 0, 0, 0); // Right
+            world.addParticleClient(particleType, x + edgePos, y,     z + 1, 0, 0, 0); // Back
+            world.addParticleClient(particleType, x + 1, y,     z + edgePos, 0, 0, 0); // Left
 
             // Top edges
-            world.addParticle(particleType, x + edgePos, y + 1, z,     0, 0, 0); // Front
-            world.addParticle(particleType, x,     y + 1, z + edgePos, 0, 0, 0); // Right
-            world.addParticle(particleType, x + edgePos, y + 1, z + 1, 0, 0, 0); // Back
-            world.addParticle(particleType, x + 1, y + 1, z + edgePos, 0, 0, 0); // Left
+            world.addParticleClient(particleType, x + edgePos, y + 1, z,     0, 0, 0); // Front
+            world.addParticleClient(particleType, x,     y + 1, z + edgePos, 0, 0, 0); // Right
+            world.addParticleClient(particleType, x + edgePos, y + 1, z + 1, 0, 0, 0); // Back
+            world.addParticleClient(particleType, x + 1, y + 1, z + edgePos, 0, 0, 0); // Left
         }
 
         // Vertical edges (skip corners since they're already done)
-        world.addParticle(particleType, x,     y + 0.5, z,     0, 0, 0); // Front-right
-        world.addParticle(particleType, x + 1, y + 0.5, z,     0, 0, 0); // Front-left
-        world.addParticle(particleType, x,     y + 0.5, z + 1, 0, 0, 0); // Back-right
-        world.addParticle(particleType, x + 1, y + 0.5, z + 1, 0, 0, 0); // Back-left
+        world.addParticleClient(particleType, x,     y + 0.5, z,     0, 0, 0); // Front-right
+        world.addParticleClient(particleType, x + 1, y + 0.5, z,     0, 0, 0); // Front-left
+        world.addParticleClient(particleType, x,     y + 0.5, z + 1, 0, 0, 0); // Back-right
+        world.addParticleClient(particleType, x + 1, y + 0.5, z + 1, 0, 0, 0); // Back-left
+
     }
 }

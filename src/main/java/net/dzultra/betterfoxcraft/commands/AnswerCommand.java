@@ -113,9 +113,10 @@ public class AnswerCommand {
             }
             String answer = answers.getOrDefault(faqKey, "No answer found");
             MinecraftClient.getInstance().player.sendMessage(Text.literal(faqMessage)
-                    .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, answer))
-                            .withColor(Formatting.GOLD)
-                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,Text.literal("Copy")))
+                    .setStyle(Style.EMPTY
+                            .withClickEvent(new ClickEvent.CopyToClipboard(answer))
+                            .withColor(Formatting.GOLD.getCode())
+                            .withHoverEvent(new HoverEvent.ShowText(Text.literal("Copy")))
                     ), false);
             return 0;
         });

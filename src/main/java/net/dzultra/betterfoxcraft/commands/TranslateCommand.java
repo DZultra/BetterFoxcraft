@@ -27,7 +27,7 @@ public class TranslateCommand {
                                                 Language to = Language.valueOf(language_translate.toUpperCase());
                                                 String result = (Translator.translate(from, to, text));
                                                 MinecraftClient.getInstance().player.sendMessage(Text.literal("\nTranslation: " + result + "\n")
-                                                        .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, result))
+                                                        .setStyle(Style.EMPTY.withClickEvent(new ClickEvent.CopyToClipboard(result))
                                                                 .withColor(Formatting.GOLD))
                                                         , false);
 

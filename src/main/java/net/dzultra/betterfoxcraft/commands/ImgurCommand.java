@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 
 public class ImgurCommand {
     private static final String IMGUR_UPLOAD_URL = "https://api.imgur.com/3/image";
-    public static String latestGeneratedImgurLink = "None";
+    public static URI latestGeneratedImgurLink = URI.create("None");
     public static LiteralArgumentBuilder<FabricClientCommandSource> getCommand() {
         return ClientCommandManager.literal("imgur")
                 .then(ClientCommandManager.argument("title", StringArgumentType.string())
@@ -56,11 +56,13 @@ public class ImgurCommand {
 
         new Thread(() -> {
             try {
-                String response = uploadToImgur(imageFile, title, description);
+                URI response = URI.create(uploadToImgur(imageFile, title, description));
                 latestGeneratedImgurLink = response;
                 client.execute(() -> client.player.sendMessage(
                         Text.literal("Image successfully uploaded: " + response)
-                                .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, response))), false
+                                .setStyle(Style.EMPTY
+                                        .withClickEvent(new ClickEvent.OpenUrl(response))
+                                ), false
                 ));
             } catch (IOException | InterruptedException e) {
                 client.execute(() -> client.player.sendMessage(Text.literal("Error while uploading: " + e.getMessage()), false));

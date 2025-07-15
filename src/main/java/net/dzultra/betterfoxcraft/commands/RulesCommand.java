@@ -82,9 +82,9 @@ public class RulesCommand {
             }
             String answer = explanations.getOrDefault(ruleKey, "No answer found");
             MinecraftClient.getInstance().player.sendMessage(Text.literal(explanationMessage)
-                    .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, answer))
+                    .setStyle(Style.EMPTY.withClickEvent(new ClickEvent.CopyToClipboard(answer))
                             .withColor(Formatting.GOLD)
-                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,Text.literal("Copy")))
+                            .withHoverEvent(new HoverEvent.ShowText(Text.literal("Copy")))
                     ), false);
             return 0;
         });
