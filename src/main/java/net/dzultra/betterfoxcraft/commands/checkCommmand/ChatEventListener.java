@@ -1,5 +1,6 @@
 package net.dzultra.betterfoxcraft.commands.checkCommmand;
 
+import net.dzultra.betterfoxcraft.commands.playerChecker.PlayerChecker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
@@ -21,7 +22,6 @@ public class ChatEventListener {
                 MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("hist " + realname);
             }
             CheckCommand.noLongerExecuted();
-            return true; // Sends the message into visible Chat regardless
         }
         return true; // Sends the message into visible Chat regardless
     }

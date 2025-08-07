@@ -30,7 +30,7 @@ public class ConditionsCommand {
                                 .executes(context -> {
                                     username = StringArgumentType.getString(context, "user");
                                     condition = StringArgumentType.getString(context, "text");
-                                    DataBaseManager.getInstance().appendConditions(username, condition);
+                                    ConditionsDataBaseManager.getInstance().appendConditions(username, condition);
                                     MinecraftClient.getInstance().player.sendMessage(
                                             Text.literal("\nSuccessfully added Condition '" + condition + "' for " + username + "\n")
                                                 .setStyle(Style.EMPTY.withColor(Formatting.GREEN)),false);
@@ -49,7 +49,7 @@ public class ConditionsCommand {
                                 .executes(context -> {
                                     username = StringArgumentType.getString(context, "user");
                                     index = IntegerArgumentType.getInteger(context, "index");
-                                    if (DataBaseManager.getInstance().removeCondition(username, index-1)) {
+                                    if (ConditionsDataBaseManager.getInstance().removeCondition(username, index-1)) {
                                         MinecraftClient.getInstance().player.sendMessage(Text.literal("\nSuccessfully removed Condition with Index: " + index + "\n")
                                                 .setStyle(Style.EMPTY.withColor(Formatting.GREEN)), false);
                                     } else {
@@ -69,7 +69,7 @@ public class ConditionsCommand {
                 }).then(ClientCommandManager.argument("user", StringArgumentType.string())
                             .executes(context -> {
                                 username = StringArgumentType.getString(context, "user");
-                                ConditionsData conditions = DataBaseManager.getInstance().getConditions(username);
+                                ConditionsData conditions = ConditionsDataBaseManager.getInstance().getConditions(username);
 
                                 MutableText message = Text.literal("\n§b-- Conditions for " + username + " --\n")
                                         .setStyle(Style.EMPTY.withColor(Formatting.FORMATTING_CODE_PREFIX));

@@ -8,12 +8,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class DataBaseManager {
-    private static DataBaseManager INSTANCE;
+public class ConditionsDataBaseManager {
+    private static ConditionsDataBaseManager INSTANCE;
 
-    public static DataBaseManager getInstance() {
+    public static ConditionsDataBaseManager getInstance() {
         if (INSTANCE != null) return INSTANCE;
-        INSTANCE = new DataBaseManager();
+        INSTANCE = new ConditionsDataBaseManager();
         return INSTANCE;
     }
 
@@ -21,7 +21,7 @@ public class DataBaseManager {
 
     Path baseDirectory = Path.of(MinecraftClient.getInstance().runDirectory.getAbsolutePath(), "conditions");
 
-    private DataBaseManager() {
+    private ConditionsDataBaseManager() {
         try {
             if (!Files.exists(baseDirectory)) {
                 Files.createDirectory(baseDirectory);
