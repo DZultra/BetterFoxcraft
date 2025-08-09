@@ -51,6 +51,7 @@ public class PlayerCheckerCommand {
                         return 1;
                     })
                 ))
+
                 .then(literal("list").executes(context -> {
                     MinecraftClient client = MinecraftClient.getInstance();
 
@@ -72,6 +73,21 @@ public class PlayerCheckerCommand {
                                         .setStyle(Style.EMPTY.withColor(Formatting.GREEN)), false);
                     }
 
+                    return 1;
+                }))
+
+                .then(literal("check").executes(context -> {
+                    MinecraftClient client = MinecraftClient.getInstance();
+                    List<String> players = PlayerCheckDataBaseManager.getAllPlayers();
+
+
+                    client.player.sendMessage(
+                            Text.literal(">\n> Checking for Players <<")
+                                    .setStyle(Style.EMPTY.withColor(Formatting.GREEN)), false);
+
+                    for (String name : players) {
+                        client.getNetworkHandler().sendChatCommand("find " + name);
+                    }
                     return 1;
                 }));
     }

@@ -115,8 +115,9 @@ public class AnswerCommand {
             MinecraftClient.getInstance().player.sendMessage(Text.literal(faqMessage)
                     .setStyle(Style.EMPTY
                             .withClickEvent(new ClickEvent.CopyToClipboard(answer))
-                            .withColor(Formatting.GOLD.getCode())
-                            .withHoverEvent(new HoverEvent.ShowText(Text.literal("Copy")))
+                            .withColor(Formatting.GOLD)
+                            .withHoverEvent(new HoverEvent.ShowText(Text.literal("Click to Copy!")
+                                    .setStyle(Style.EMPTY.withColor(Formatting.GREEN))))
                     ), false);
             return 0;
         });

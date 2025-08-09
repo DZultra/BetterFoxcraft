@@ -13,6 +13,7 @@ public class StartCommand {
             MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("redeemkey");
             MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("daily");
             MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("pwarp bump");
+            MinecraftClient.getInstance().getNetworkHandler().sendChatCommand("playercheck check");
             return 0;
         });
     }

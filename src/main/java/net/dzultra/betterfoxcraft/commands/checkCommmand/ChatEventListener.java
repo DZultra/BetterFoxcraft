@@ -1,6 +1,5 @@
 package net.dzultra.betterfoxcraft.commands.checkCommmand;
 
-import net.dzultra.betterfoxcraft.commands.playerChecker.PlayerChecker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
