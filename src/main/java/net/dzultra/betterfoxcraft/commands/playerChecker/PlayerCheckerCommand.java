@@ -82,7 +82,7 @@ public class PlayerCheckerCommand {
 
 
                     client.player.sendMessage(
-                            Text.literal(">\n> Checking for Players <<")
+                            Text.literal(">> Checking for Players <<")
                                     .setStyle(Style.EMPTY.withColor(Formatting.GREEN)), false);
 
                     for (String name : players) {
