@@ -1,6 +1,7 @@
 {
   "keybinds.betterfoxcraft.category": "BetterFoxcraft",
   "key.betterfoxcraft.open_settings": "Open Settings",
+  "key.betterdfoxcraft.move": "Move GUI Items",
   "text.autoconfig.betterfoxcraft.title": "BetterFoxcraft Settings",
   "text.autoconfig.betterfoxcraft.option.clientID": "API Key/ID for Imgur Command",
   "text.autoconfig.betterfoxcraft.option.maxMissingBlocks": "Max missing blocks before LayerCheck cancels",

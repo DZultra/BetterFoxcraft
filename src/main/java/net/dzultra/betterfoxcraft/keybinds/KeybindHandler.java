@@ -2,10 +2,14 @@ package net.dzultra.betterfoxcraft.keybinds;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import net.dzultra.betterfoxcraft.ModConfig;
+import net.dzultra.betterfoxcraft.slotswitcher.SlotSwitcher;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
+import net.fabricmc.fabric.api.client.screen.v1.ScreenKeyboardEvents;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
 
 @Environment(EnvType.CLIENT)
 public class KeybindHandler {
@@ -18,6 +22,17 @@ public class KeybindHandler {
                     );
                 }
             }
+        });
+
+        ScreenEvents.BEFORE_INIT.register((client, screen, w, h) -> {
+            ScreenKeyboardEvents.afterKeyPress(screen).register((scr, key, scancode, modifiers) -> {
+                if (ModKeyBinds.moveKeybind.matchesKey(key, scancode) && scr instanceof HandledScreen<?> hs) {
+                    String title = hs.getTitle().getString();
+                    if (AutoConfig.getConfigHolder(ModConfig.class).getConfig().GUIName.equals(title)) {
+                        SlotSwitcher.scheduleConfiguredMoves(client, hs.getScreenHandler());
+                    }
+                }
+            });
         });
     }
 }
