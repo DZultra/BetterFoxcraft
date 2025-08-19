@@ -46,15 +46,15 @@ public class LayerCheckerCommand {
 
         if (radius > 100) {
             MinecraftClient.getInstance().player.sendMessage(Text.literal("\n--- Layer Check Start ---\n")
-                    .setStyle(Style.EMPTY.withColor(Formatting.GOLD))
+                    .setStyle(Style.EMPTY.withColor(Formatting.GOLD)), false
             );
 
             MinecraftClient.getInstance().player.sendMessage(Text.literal("Radius out of bound: Cannot be bigger than 100")
-                    .setStyle(Style.EMPTY.withColor(Formatting.RED))
+                    .setStyle(Style.EMPTY.withColor(Formatting.RED)), false
             );
 
             MinecraftClient.getInstance().player.sendMessage(Text.literal("\n--- Layer Check End ---\n")
-                    .setStyle(Style.EMPTY.withColor(Formatting.GOLD))
+                    .setStyle(Style.EMPTY.withColor(Formatting.GOLD)), false
             );
             return 1;
         }
@@ -62,15 +62,15 @@ public class LayerCheckerCommand {
         // If the block doesn't exist in the registry
         if (blockToCheck == Blocks.AIR && !nameOfBlockToCheckFor.equals("minecraft:air")) {
             MinecraftClient.getInstance().player.sendMessage(Text.literal("\n--- Layer Check Start ---\n")
-                    .setStyle(Style.EMPTY.withColor(Formatting.GOLD))
+                    .setStyle(Style.EMPTY.withColor(Formatting.GOLD)), false
             );
 
             MinecraftClient.getInstance().player.sendMessage(Text.literal("Block does not exist: " + nameOfBlockToCheckFor)
-                    .setStyle(Style.EMPTY.withColor(Formatting.RED))
+                    .setStyle(Style.EMPTY.withColor(Formatting.RED)), false
             );
 
             MinecraftClient.getInstance().player.sendMessage(Text.literal("\n--- Layer Check End ---\n")
-                    .setStyle(Style.EMPTY.withColor(Formatting.GOLD))
+                    .setStyle(Style.EMPTY.withColor(Formatting.GOLD)), false
             );
 
             return 1;

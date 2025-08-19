@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 public class LayerChecker {
     public static void checkLayer(String nameOfBlockToCheckFor,Block blockToCheck, int radius, BlockPos centerPos) {
         MinecraftClient.getInstance().player.sendMessage(Text.literal("\n--- Layer Check Start ---\n")
-                .setStyle(Style.EMPTY.withColor(Formatting.GOLD))
+                .setStyle(Style.EMPTY.withColor(Formatting.GOLD)), false
         );
 
         World world = MinecraftClient.getInstance().player.getWorld();
@@ -47,7 +47,7 @@ public class LayerChecker {
                         String unpackedBlock = " (X: " + currentPos.getX() + " | Y: " + currentPos.getY() + " | Z: " + currentPos.getZ() + ")";
                         String wrongBlock = Registries.BLOCK.getId(world.getBlockState(currentPos).getBlock()).toString();
                         MinecraftClient.getInstance().player.sendMessage(Text.literal("Missing Block at " + unpackedBlock + " --> " + wrongBlock)
-                                .setStyle(Style.EMPTY.withColor(Formatting.RED))
+                                .setStyle(Style.EMPTY.withColor(Formatting.RED)), false
                         );
                     }
                 }
@@ -66,11 +66,11 @@ public class LayerChecker {
 
         MinecraftClient.getInstance().player.sendMessage(
                 Text.literal("\nAll blocks within radius of " + radius + " from " + block + " are " + nameOfBlockToCheckFor + "!\n")
-                        .setStyle(Style.EMPTY.withColor(Formatting.GREEN))
+                        .setStyle(Style.EMPTY.withColor(Formatting.GREEN)), false
         );
 
         MinecraftClient.getInstance().player.sendMessage(Text.literal("\n--- Layer Check End ---\n")
-                .setStyle(Style.EMPTY.withColor(Formatting.GOLD))
+                .setStyle(Style.EMPTY.withColor(Formatting.GOLD)), false
         );
     }
 
@@ -78,11 +78,11 @@ public class LayerChecker {
         String block = "Block X: " + center.getX() + " Y: " + center.getY() + " Z: " + center.getZ();
         MinecraftClient.getInstance().player.sendMessage(
                 Text.literal("\n" + missingCount + " non-" + nameOfBlockToCheckFor + " blocks found within radius of " + radius + " from " + block)
-                        .setStyle(Style.EMPTY.withColor(Formatting.DARK_RED))
+                        .setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)), false
         );
 
         MinecraftClient.getInstance().player.sendMessage(Text.literal("\n--- Layer Check End ---\n")
-                .setStyle(Style.EMPTY.withColor(Formatting.GOLD))
+                .setStyle(Style.EMPTY.withColor(Formatting.GOLD)), false
         );
     }
 }
