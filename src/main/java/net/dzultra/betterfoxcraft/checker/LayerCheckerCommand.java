@@ -18,7 +18,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
 public class LayerCheckerCommand {
-    public static LiteralArgumentBuilder<FabricClientCommandSource> getCommand(CommandRegistryAccess commandRegistryAccess) {
+    public static LiteralArgumentBuilder<FabricClientCommandSource> getCommand() {
         return ClientCommandManager.literal("layerchecker")
                 .then(ClientCommandManager.argument("block", StringArgumentType.string())
                     .then(ClientCommandManager.argument("radius", IntegerArgumentType.integer())

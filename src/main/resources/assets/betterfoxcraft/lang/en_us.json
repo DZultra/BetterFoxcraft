@@ -1,3 +1,7 @@
 {
-
+  "keybinds.betterfoxcraft.category": "BetterFoxcraft",
+  "key.betterfoxcraft.open_settings": "Open Settings",
+  "key.betterfoxcraft.move": "Move GUI Items",
+  "text.autoconfig.betterfoxcraft.title": "BetterFoxcraft Settings",
+  "text.autoconfig.betterfoxcraft.option.GUIname": "GUI Name for SlotSwitcher"
 }

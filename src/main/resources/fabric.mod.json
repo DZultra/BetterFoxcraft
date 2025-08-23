@@ -19,6 +19,9 @@
 		],
 		"fabric-datagen": [
 			"net.dzultra.betterfoxcraft.BetterFoxcraftDataGenerator"
+		],
+		"modmenu": [
+			"net.dzultra.betterfoxcraft.ModMenuIntegration"
 		]
 	},
 	"mixins": [
