@@ -32,7 +32,7 @@
 		"minecraft": "~1.21",
 		"java": ">=21",
 		"fabric-api": "*",
-		"cloth-config": ">=15.0.148"
+		"cloth-config": ">=15.0.140"
 	},
 	"suggests": {
 		"mod-menu": ">=11.0.3"
