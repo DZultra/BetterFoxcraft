@@ -32,7 +32,7 @@ public class BlockSelector {
             if (!AutoConfig.getConfigHolder(ModConfig.class).getConfig().enableBlockSelector || !player.getStackInHand(hand).isEmpty()) return ActionResult.PASS;
 
 
-            if (world.isClient && hand == Hand.MAIN_HAND && hitResult.getType() == HitResult.Type.BLOCK) {
+            if (world.isClient() && hand == Hand.MAIN_HAND && hitResult.getType() == HitResult.Type.BLOCK) {
                 BlockPos pos = hitResult.getBlockPos();
                 BlockState state = world.getBlockState(pos);
 

@@ -25,8 +25,8 @@ public class KeybindHandler {
         });
 
         ScreenEvents.BEFORE_INIT.register((client, screen, w, h) -> {
-            ScreenKeyboardEvents.afterKeyPress(screen).register((scr, key, scancode, modifiers) -> {
-                if (ModKeyBinds.moveKeybind.matchesKey(key, scancode) && scr instanceof HandledScreen<?> hs) {
+            ScreenKeyboardEvents.afterKeyPress(screen).register((scr, key) -> {
+                if (ModKeyBinds.moveKeybind.matchesKey(key) && scr instanceof HandledScreen<?> hs) {
                     String title = hs.getTitle().getString();
                     if (AutoConfig.getConfigHolder(ModConfig.class).getConfig().GUIName.equals(title)) {
                         SlotSwitcher.scheduleConfiguredMoves(client, hs.getScreenHandler());

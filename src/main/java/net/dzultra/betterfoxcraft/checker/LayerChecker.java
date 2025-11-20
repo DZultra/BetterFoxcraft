@@ -20,7 +20,9 @@ public class LayerChecker {
         String startMessage = "\n--- Layer Check Start ---\n";
         sendMessage(startMessage, Formatting.GOLD);
 
-        World world = MinecraftClient.getInstance().player.getWorld();
+        if (MinecraftClient.getInstance().player == null) return;
+
+        World world = MinecraftClient.getInstance().player.getEntityWorld();
         boolean allBlocks = true;
         int missingBlocks = 0;
         int maxMissingBlocks = AutoConfig.getConfigHolder(ModConfig.class).getConfig().maxMissingBlocks;

@@ -15,7 +15,7 @@ public class ModSpectatorTracer {
 
             client.world.getEntities().forEach(entity -> {
                 if (entity instanceof PlayerEntity player && player.isSpectator()) {
-                    Vec3d pos = player.getPos();
+                    Vec3d pos = player.getEntityPos();
 
                     client.world.addParticleClient(ParticleTypes.END_ROD,
                             pos.x, pos.y + 0.5, pos.z,
