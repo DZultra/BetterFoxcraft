@@ -1,0 +1,13 @@
+{
+  "clientID": "",
+  "GUIName": "Chest",
+  "discordToken": "",
+  "maxMissingBlocks": 20,
+  "maxRadius": 100,
+  "totalSeconds": 10,
+  "ticks_between_updates": 1,
+  "enableParticleTracker": true,
+  "enableBlockSelector": false,
+  "enableSpectatorTracer": true,
+  "boxOffset": 0.05
+}
