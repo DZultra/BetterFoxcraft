@@ -1,6 +1,7 @@
 package net.dzultra.betterfoxcraft.keybinds;
 
 import me.shedaniel.autoconfig.AutoConfig;
+import net.dzultra.betterfoxcraft.ConfigScreenFactory;
 import net.dzultra.betterfoxcraft.ModConfig;
 import net.dzultra.betterfoxcraft.slotswitcher.SlotSwitcher;
 import net.fabricmc.api.EnvType;
@@ -17,9 +18,7 @@ public class KeybindHandler {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (ModKeyBinds.openConfigKeybind.wasPressed()) {
                 if (client.player != null) {
-                    MinecraftClient.getInstance().setScreen(
-                            AutoConfig.getConfigScreen(ModConfig.class, MinecraftClient.getInstance().currentScreen).get()
-                    );
+                    MinecraftClient.getInstance().setScreen(ConfigScreenFactory.create(MinecraftClient.getInstance().currentScreen));
                 }
             }
         });
