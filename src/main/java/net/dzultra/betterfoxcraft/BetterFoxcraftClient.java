@@ -12,6 +12,8 @@ import net.dzultra.betterfoxcraft.commands.gambling.CasinoCommand;
 import net.dzultra.betterfoxcraft.commands.gambling.Coinflip2Command;
 import net.dzultra.betterfoxcraft.commands.gambling.CoinflipCommand;
 import net.dzultra.betterfoxcraft.commands.gambling.RockPaperScissorsCommand;
+import net.dzultra.betterfoxcraft.commands.jfa.LeaderboardCommand;
+import net.dzultra.betterfoxcraft.commands.jfa.PlayerStatsCommand;
 import net.dzultra.betterfoxcraft.commands.playerChecker.PlayerCheckerCommand;
 import net.dzultra.betterfoxcraft.keybinds.KeybindHandler;
 import net.dzultra.betterfoxcraft.keybinds.ModKeyBinds;
@@ -47,6 +49,8 @@ public class BetterFoxcraftClient implements ClientModInitializer {
 //            dispatcher.register(DiscordCommand.getCommand());
             //dispatcher.register(CheckCommand.getCommand());
             dispatcher.register(PlayerCheckerCommand.getCommand());
+            dispatcher.register(LeaderboardCommand.getCommand());
+            dispatcher.register(PlayerStatsCommand.getCommand());
         }));
         ClientTickHandler.register();
         ModKeyBinds.register();

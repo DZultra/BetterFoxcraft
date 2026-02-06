@@ -42,6 +42,7 @@ dependencies {
     modApi "com.terraformersmc:modmenu:${project.mod_menu}"
 	implementation 'com.google.code.gson:gson:2.11.0'
 	implementation 'net.dv8tion:JDA:5.4.0'
+    implementation 'net.dzultra:JavaFoxcraftAPI-21:1.0.3'
 }
 
 processResources {
