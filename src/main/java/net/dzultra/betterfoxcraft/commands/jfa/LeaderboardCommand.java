@@ -15,6 +15,7 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,138 +24,115 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
 public class LeaderboardCommand {
+
     public static LiteralArgumentBuilder<FabricClientCommandSource> getCommand() {
         return ClientCommandManager.literal("leaderboard")
-            .then(ClientCommandManager.argument("gamemode", StringArgumentType.word())
-                    .suggests((ctx, builder) -> suggestGamemodes(builder))
-                    .then(ClientCommandManager.argument("board", StringArgumentType.word())
-                            .suggests((ctx, builder) ->
-                                    suggestBoards(
-                                            builder,
-                                            StringArgumentType.getString(ctx, "gamemode")
-                                    )
-                            )
-                            .then(ClientCommandManager.argument("period", StringArgumentType.word())
-                                    .suggests((ctx, builder) -> suggestPeriods(builder))
-                                    .executes(ctx -> runLeaderboard(ctx, -1))
-                                    .then(ClientCommandManager.argument("position",
-                                                    IntegerArgumentType.integer(1))
-                                            .executes(ctx ->
-                                                    runLeaderboard(
-                                                            ctx,
-                                                            IntegerArgumentType.getInteger(ctx, "position")
+                .then(ClientCommandManager.argument("gamemode", StringArgumentType.word())
+                        .suggests((ctx, builder) -> suggestGamemodes(builder))
+                        .then(ClientCommandManager.argument("board", StringArgumentType.word())
+                                .suggests(LeaderboardCommand::suggestBoards)
+                                .then(ClientCommandManager.argument("period", StringArgumentType.word())
+                                        .suggests(LeaderboardCommand::suggestPeriods)
+                                        .executes(ctx -> runLeaderboard(ctx, -1))
+                                        .then(ClientCommandManager.argument("position", IntegerArgumentType.integer(1, 10))
+                                                    .executes(ctx ->
+                                                            runLeaderboard(ctx, IntegerArgumentType.getInteger(ctx, "position"))
                                                     )
-                                            )
-                                    )
-                            )
-                    )
-            );
+                                        )
+                                )
+                        )
+                );
     }
 
-    private static int runLeaderboard(
-            CommandContext<FabricClientCommandSource> ctx,
-            int position
-    ) {
-
+    private static int runLeaderboard(CommandContext<FabricClientCommandSource> ctx, int position) {
+        FabricClientCommandSource source = ctx.getSource();
         String gamemodeArg = StringArgumentType.getString(ctx, "gamemode");
         String boardArg = StringArgumentType.getString(ctx, "board");
         String periodArg = StringArgumentType.getString(ctx, "period");
-
         LeaderboardType type = parseBoard(gamemodeArg, boardArg);
         Period period = Period.valueOf(periodArg.toUpperCase());
 
         if (type == null) {
-            ctx.getSource().sendError(Text.literal("Invalid leaderboard type."));
+            source.sendFeedback(Text.literal("Invalid leaderboard type.").formatted(Formatting.RED));
             return 0;
         }
 
-        // Run async
-        CompletableFuture.runAsync(() -> {
-
-            try {
-
-                ServerLeaderboard leaderboard =
-                        new ServerLeaderboard(type, period);
-
-                // Switch back to client thread
-                MinecraftClient.getInstance().execute(() -> {
-                    displayLeaderboard(ctx, leaderboard, position);
+        CompletableFuture.supplyAsync(() -> {
+                try {
+                    return new ServerLeaderboard(type, period);
+                } catch (Exception e) {
+                    return e;
+                }
+        }).thenAccept(result -> {
+                MinecraftClient client = MinecraftClient.getInstance();
+                client.execute(() -> {
+                    if (result instanceof Exception) {
+                        source.sendFeedback(Text.literal("Failed to fetch leaderboard.").formatted(Formatting.RED));
+                        return;
+                    }
+                    ServerLeaderboard leaderboard = (ServerLeaderboard) result;
+                    sendLeaderboardChat(source, leaderboard, position, gamemodeArg);
                 });
-
-            } catch (Exception e) {
-
-                MinecraftClient.getInstance().execute(() -> {
-                    ctx.getSource().sendError(
-                            Text.literal("Failed to fetch leaderboard.")
-                    );
-                });
-
-                e.printStackTrace();
-            }
-
         });
-
         return 1;
     }
 
-    private static void displayLeaderboard(
-            CommandContext<FabricClientCommandSource> ctx,
+    private static void sendLeaderboardChat(
+            FabricClientCommandSource source,
             ServerLeaderboard leaderboard,
-            int position
+            int position,
+            String gamemodeArg
     ) {
-
         List<ServerLeaderboardsResponse.LeaderboardEntry> data = leaderboard.getEntries();
-
         if (data == null || data.isEmpty()) {
-            ctx.getSource().sendError(Text.literal("No data found."));
+            source.sendFeedback(Text.literal("No data found.").formatted(Formatting.RED));
             return;
         }
 
-        ctx.getSource().sendFeedback(
-                Text.literal("\n§6§l" + leaderboard.getTitle())
-        );
-
+        source.sendFeedback(Text.literal("┌──────────────────────────┐").formatted(Formatting.DARK_GRAY));
+        source.sendFeedback(Text.literal("   " + leaderboard.getTitle() + " - " + capitalizeFirst(gamemodeArg)).formatted(Formatting.GOLD, Formatting.BOLD));
+        source.sendFeedback(Text.literal("├──────────────────────────┤").formatted(Formatting.DARK_GRAY));
         if (position > 0) {
-            var entry = leaderboard.getEntry(position);
-
+            ServerLeaderboardsResponse.LeaderboardEntry entry = leaderboard.getEntry(position);
             if (entry == null) {
-                ctx.getSource().sendError(Text.literal("Position not found."));
-                return;
+                source.sendFeedback(Text.literal("Position not found.").formatted(Formatting.RED));
+            } else {
+                source.sendFeedback(formatEntry(entry));
             }
-
-            ctx.getSource().sendFeedback(formatEntry(entry));
+            source.sendFeedback(Text.literal("└──────────────────────────┘").formatted(Formatting.DARK_GRAY));
             return;
         }
-
         for (int i = 0; i < Math.min(10, data.size()); i++) {
-            ctx.getSource().sendFeedback(formatEntry(data.get(i)));
+            source.sendFeedback(formatEntry(data.get(i)));
         }
+        source.sendFeedback(Text.literal("└──────────────────────────┘").formatted(Formatting.DARK_GRAY));
     }
 
-    private static Text formatEntry(
-            ServerLeaderboardsResponse.LeaderboardEntry entry
-    ) {
-        return Text.literal(
-                "§e#" + entry.position() +
-                        " §b" + entry.username() +
-                        " §7» §a" + entry.value()
+    private static Text formatEntry(ServerLeaderboardsResponse.LeaderboardEntry entry) {
+        return Text.literal(" #" + entry.position() + " ").formatted(Formatting.YELLOW)
+                .append(Text.literal(entry.username())
+                        .formatted(Formatting.AQUA))
+                .append(Text.literal(" » ")
+                        .formatted(Formatting.DARK_GRAY))
+                .append(Text.literal(String.valueOf(entry.value()))
+                        .formatted(Formatting.GREEN));
+    }
+
+    private static CompletableFuture<Suggestions> suggestGamemodes(SuggestionsBuilder builder) {
+        List<Gamemode> gmList = List.of(
+                Gamemode.ONEBLOCK, Gamemode.KINGDOMS,
+                Gamemode.SURVIVAL, Gamemode.PARKOUR
         );
-    }
 
-    private static CompletableFuture<Suggestions>
-    suggestGamemodes(SuggestionsBuilder builder) {
-
-        List<Gamemode> gmList = List.of(Gamemode.ONEBLOCK, Gamemode.KINGDOMS, Gamemode.SURVIVAL, Gamemode.PARKOUR);
-
-        for (Gamemode gm :gmList) {
+        for (Gamemode gm : gmList) {
             builder.suggest(gm.name().toLowerCase());
         }
 
         return builder.buildFuture();
     }
 
-    private static CompletableFuture<Suggestions>
-    suggestBoards(SuggestionsBuilder builder, String gamemode) {
+    private static CompletableFuture<Suggestions> suggestBoards(CommandContext<FabricClientCommandSource> ctx, SuggestionsBuilder builder) {
+        String gamemode = StringArgumentType.getString(ctx, "gamemode");
 
         LeaderboardType[] values = switch (gamemode.toLowerCase()) {
             case "kingdoms" -> KingdomsLeaderboards.values();
@@ -165,22 +143,15 @@ public class LeaderboardCommand {
         };
 
         for (LeaderboardType type : values) {
-
-            // Suggest enum ID (command-safe)
             String id = ((Enum<?>) type).name().toLowerCase();
 
-            // Show title as tooltip
-            builder.suggest(
-                    id,
-                    Text.literal(type.getTitle())
-            );
+            builder.suggest(id, Text.literal(type.getTitle()));
         }
 
         return builder.buildFuture();
     }
 
-    private static CompletableFuture<com.mojang.brigadier.suggestion.Suggestions>
-    suggestPeriods(SuggestionsBuilder builder) {
+    private static CompletableFuture<Suggestions> suggestPeriods(CommandContext<FabricClientCommandSource> ctx, SuggestionsBuilder builder) {
 
         for (Period p : Period.values()) {
             builder.suggest(p.name().toLowerCase());
@@ -189,10 +160,7 @@ public class LeaderboardCommand {
         return builder.buildFuture();
     }
 
-    private static LeaderboardType parseBoard(
-            String gamemode,
-            String board
-    ) {
+    private static LeaderboardType parseBoard(String gamemode, String board) {
         try {
             return switch (gamemode.toLowerCase()) {
                 case "kingdoms" ->
@@ -209,5 +177,15 @@ public class LeaderboardCommand {
             return null;
         }
     }
+
+    public static String capitalizeFirst(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+
+        return input.substring(0, 1).toUpperCase()
+                + input.substring(1).toLowerCase();
+    }
 }
+
 
