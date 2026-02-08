@@ -50,7 +50,14 @@ public class LeaderboardCommand {
         String boardArg = StringArgumentType.getString(ctx, "board");
         String periodArg = StringArgumentType.getString(ctx, "period");
         LeaderboardType type = parseBoard(gamemodeArg, boardArg);
-        Period period = Period.valueOf(periodArg.toUpperCase());
+        Period period;
+
+        try {
+            period = Period.valueOf(periodArg.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            source.sendFeedback(Text.literal("Invalid period type.").formatted(Formatting.RED));
+            return 0;
+        }
 
         if (type == null) {
             source.sendFeedback(Text.literal("Invalid leaderboard type.").formatted(Formatting.RED));
