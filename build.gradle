@@ -42,8 +42,9 @@ dependencies {
     modApi "com.terraformersmc:modmenu:${project.mod_menu}"
 	implementation 'com.google.code.gson:gson:2.11.0'
 	implementation 'net.dv8tion:JDA:5.4.0'
-    //implementation 'net.dzultra:JavaFoxcraftAPI-21:1.0.3'
-	implementation files("libs/JavaFoxcraftAPI-21-1.0.3.jar")
+    implementation 'net.dzultra:JavaFoxcraftAPI-21:1.0.4'
+    include 'net.dzultra:JavaFoxcraftAPI-21:1.0.4'
+	//implementation files("libs/JavaFoxcraftAPI-21-1.0.3.jar")
 	compileOnly 'org.jetbrains:annotations:24.0.1'
 }
 
