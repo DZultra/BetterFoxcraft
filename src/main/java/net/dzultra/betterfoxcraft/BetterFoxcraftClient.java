@@ -2,6 +2,7 @@ package net.dzultra.betterfoxcraft;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
+import net.dzultra.betterfoxcraft.commands.jfa.HistoryCommand;
 import net.dzultra.betterfoxcraft.commands.jfa.LeaderboardCommand;
 import net.dzultra.betterfoxcraft.commands.jfa.PlayerStatsCommand;
 import net.dzultra.betterfoxcraft.keybinds.KeybindHandler;
@@ -17,6 +18,7 @@ public class BetterFoxcraftClient implements ClientModInitializer {
         ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> {
             dispatcher.register(LeaderboardCommand.getCommand());
             dispatcher.register(PlayerStatsCommand.getCommand());
+            dispatcher.register(HistoryCommand.getCommand());
         }));
         ModKeyBinds.register();
         KeybindHandler.register();

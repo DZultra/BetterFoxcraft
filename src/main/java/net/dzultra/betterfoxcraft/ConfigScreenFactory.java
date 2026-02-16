@@ -24,8 +24,8 @@ public class ConfigScreenFactory {
         var general = builder.getOrCreateCategory(Text.literal("General"));
 
         general.addEntry(entryBuilder
-                .startStrField(Text.literal("GUI Name"), config.GUIName)
-                .setSaveConsumer(value -> config.GUIName = value)
+                .startIntField(Text.literal("Punishments per Page"), config.punishmentsPerPage)
+                .setSaveConsumer(value -> config.punishmentsPerPage = value)
                 .build());
 
         return builder.build();
