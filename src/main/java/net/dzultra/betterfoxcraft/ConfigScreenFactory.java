@@ -20,7 +20,7 @@ public class ConfigScreenFactory {
 
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
-        // ─────────────── General ───────────────
+        // ─────────────── General ───────────────-
         var general = builder.getOrCreateCategory(Text.literal("General"));
 
         general.addEntry(entryBuilder
@@ -36,6 +36,11 @@ public class ConfigScreenFactory {
         general.addEntry(entryBuilder
                 .startStrField(Text.literal("Discord Token"), config.discordToken)
                 .setSaveConsumer(value -> config.discordToken = value)
+                .build());
+
+        general.addEntry(entryBuilder
+                .startIntField(Text.literal("Punishments per Page"), config.punishmentsPerPage)
+                .setSaveConsumer(value -> config.punishmentsPerPage = value)
                 .build());
 
         // ─────────────── Limits ───────────────

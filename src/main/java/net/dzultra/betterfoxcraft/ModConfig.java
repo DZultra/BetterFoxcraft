@@ -8,6 +8,7 @@ public class ModConfig implements ConfigData {
     public String clientID = "";
     public String GUIName = "";
     public String discordToken = "";
+    public Integer punishmentsPerPage = 10;
     public Integer maxMissingBlocks = 20;
     public Integer maxRadius = 100;
     public Integer totalSeconds = 10;
