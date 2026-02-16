@@ -51,7 +51,6 @@ public class HistoryCommand {
         }
 
         // ---------- FETCH NEW ----------
-        System.out.println("Env: " + FabricLoader.getInstance().getEnvironmentType());
         CompletableFuture.supplyAsync(() -> {
             try {
                 return new PlayerPunishments(username).getPunishments();
@@ -59,7 +58,6 @@ public class HistoryCommand {
                 return e;
             }
         }).thenAccept(result -> {
-            System.out.println("Accepted");
             MinecraftClient client = MinecraftClient.getInstance();
             client.execute(() -> {
                 if (result instanceof Exception) {
