@@ -10,6 +10,7 @@ import net.dzultra.jfa.punishments.PlayerPunishments;
 import net.dzultra.jfa.punishments.Punishment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -50,6 +51,7 @@ public class HistoryCommand {
         }
 
         // ---------- FETCH NEW ----------
+        System.out.println("Env: " + FabricLoader.getInstance().getEnvironmentType());
         CompletableFuture.supplyAsync(() -> {
             try {
                 return new PlayerPunishments(username).getPunishments();
@@ -57,6 +59,7 @@ public class HistoryCommand {
                 return e;
             }
         }).thenAccept(result -> {
+            System.out.println("Accepted");
             MinecraftClient client = MinecraftClient.getInstance();
             client.execute(() -> {
                 if (result instanceof Exception) {
@@ -69,6 +72,9 @@ public class HistoryCommand {
                 PunishmentCache.put(username, punishments);
                 displayPage(source, username, punishments, page);
             });
+        }).exceptionally(ex -> {
+            ex.printStackTrace();
+            return null;
         });
         return 1;
     }
