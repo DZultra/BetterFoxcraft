@@ -16,6 +16,5 @@ public class BetterFoxcraft implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		LOGGER.info("Initializing BetterFoxcraft");
-        Loader.startLoader();
 	}
 }
