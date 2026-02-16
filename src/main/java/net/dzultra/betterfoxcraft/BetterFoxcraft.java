@@ -1,6 +1,5 @@
 package net.dzultra.betterfoxcraft;
 
-import net.dzultra.betterfoxcraft.discord.DiscordBotManager;
 import net.fabricmc.api.ModInitializer;
 
 import org.slf4j.Logger;
@@ -17,5 +16,6 @@ public class BetterFoxcraft implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		LOGGER.info("Initializing BetterFoxcraft");
+        Loader.startLoader();
 	}
 }

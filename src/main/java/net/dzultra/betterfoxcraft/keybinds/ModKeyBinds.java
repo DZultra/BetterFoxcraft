@@ -8,7 +8,6 @@ import org.lwjgl.glfw.GLFW;
 
 public class ModKeyBinds {
     public static KeyBinding openConfigKeybind;
-    public static KeyBinding moveKeybind;
     private static final KeyBinding.Category BetterFoxcraftCategory = new KeyBinding.Category(Identifier.of("keybinds.betterfoxcraft.category"));
 
 
@@ -17,12 +16,6 @@ public class ModKeyBinds {
                 "key.betterfoxcraft.open_settings",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_O,
-                BetterFoxcraftCategory
-        ));
-        moveKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.betterfoxcraft.move",
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_M,
                 BetterFoxcraftCategory
         ));
     }
