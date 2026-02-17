@@ -10,14 +10,12 @@ import net.dzultra.jfa.punishments.PlayerPunishments;
 import net.dzultra.jfa.punishments.Punishment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 public class HistoryCommand {
     public static LiteralArgumentBuilder<FabricClientCommandSource> getCommand() {
@@ -61,7 +59,8 @@ public class HistoryCommand {
             MinecraftClient client = MinecraftClient.getInstance();
             client.execute(() -> {
                 if (result instanceof Exception) {
-                    source.sendFeedback(Text.literal("Failed to fetch punishment history.").formatted(Formatting.RED));
+                    source.sendFeedback(Text.literal("Failed to fetch punishment history." + ((Exception) result).getMessage()).formatted(Formatting.RED));
+                    ((Exception) result).printStackTrace();
                     return;
                 }
 
