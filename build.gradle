@@ -44,8 +44,8 @@ dependencies {
     implementation "org.jsoup:jsoup:1.16.1"
     include "org.jsoup:jsoup:1.16.1"
 	implementation 'net.dv8tion:JDA:5.4.0'
-    implementation 'net.dzultra:JavaFoxcraftAPI-21:1.0.8'
-    include 'net.dzultra:JavaFoxcraftAPI-21:1.0.8'
+    implementation 'net.dzultra:JavaFoxcraftAPI-21:1.0.9'
+    include 'net.dzultra:JavaFoxcraftAPI-21:1.0.9'
 	//implementation files("libs/JavaFoxcraftAPI-21-1.0.6.jar")
 	compileOnly 'org.jetbrains:annotations:24.0.1'
 }
