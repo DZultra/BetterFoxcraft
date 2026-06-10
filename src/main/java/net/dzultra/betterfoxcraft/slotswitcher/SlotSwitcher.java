@@ -1,13 +1,13 @@
 package net.dzultra.betterfoxcraft.slotswitcher;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerInput;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -19,7 +19,7 @@ public class SlotSwitcher {
     private static final int ticksBetweenMoves = 2;
     private static int cooldown = 0;
 
-    private record PendingMove(ScreenHandler handler, int fromIndex, int toIndex) {}
+    private record PendingMove(AbstractContainerMenu handler, int fromIndex, int toIndex) {}
 
     private static void ensureTickRegistered() {
         if (tickRegistered) return;
@@ -29,13 +29,13 @@ public class SlotSwitcher {
             if (queue.isEmpty()) return;
 
             // if player closed screen or not in a HandledScreen -> cancel pending moves
-            if (!(client.currentScreen instanceof HandledScreen<?> hs)) {
+            if (!(client.screen instanceof AbstractContainerScreen<?> hs)) {
                 queue.clear();
                 cooldown = 0;
                 return;
             }
 
-            ScreenHandler currentHandler = hs.getScreenHandler();
+            AbstractContainerMenu currentHandler = hs.getMenu();
 
             if (cooldown > 0) {
                 cooldown--;
@@ -59,8 +59,8 @@ public class SlotSwitcher {
                 Slot from = currentHandler.slots.get(next.fromIndex);
                 Slot to = currentHandler.slots.get(next.toIndex);
 
-                if (from.hasStack()) {
-                    doClickMove(client, currentHandler.syncId, from.id, to.id);
+                if (from.hasItem()) {
+                    doClickMove(client, currentHandler.containerId, from.index, to.index);
                 }
             }
 
@@ -68,14 +68,14 @@ public class SlotSwitcher {
         });
     }
 
-    public static void scheduleConfiguredMoves(MinecraftClient client, ScreenHandler handler) {
+    public static void scheduleConfiguredMoves(Minecraft client, AbstractContainerMenu handler) {
         int playerInventoryStart = handler.slots.size() - 36;
         int slotIndex = playerInventoryStart + 35; // slot 35 in player inventory
 
         if (slotIndex >= 0 && slotIndex < handler.slots.size()) {
             Slot slot = handler.slots.get(slotIndex);
-            if (slot.hasStack()) {
-                ItemStack stack = slot.getStack();
+            if (slot.hasItem()) {
+                ItemStack stack = slot.getItem();
                 if (stack.getItem() == Items.NETHERITE_BOOTS) { // Switch to PvP Inv
                     buildQueueEntries(SlotSwitcherRules.rules1, handler);
                 } else if (stack.getItem() == Items.WIND_CHARGE) { // Switch to Casual Inv
@@ -85,7 +85,7 @@ public class SlotSwitcher {
         }
     }
 
-    private static void buildQueueEntries(List<SlotSwitcherRules.SlotMoveRule> rules, ScreenHandler handler) {
+    private static void buildQueueEntries(List<SlotSwitcherRules.SlotMoveRule> rules, AbstractContainerMenu handler) {
         // Build the queue entries from the rules
         for (SlotSwitcherRules.SlotMoveRule rule : rules) {
             int fromIndex = getSlotIndex(handler, rule.gui1(), rule.fromSlot());
@@ -99,7 +99,7 @@ public class SlotSwitcher {
         ensureTickRegistered();
     }
 
-    private static int getSlotIndex(ScreenHandler handler, boolean isGui, int logicalIndex) {
+    private static int getSlotIndex(AbstractContainerMenu handler, boolean isGui, int logicalIndex) {
         int containerSize = handler.slots.size() - 36;
         if (isGui) {
             return logicalIndex;
@@ -108,8 +108,8 @@ public class SlotSwitcher {
         }
     }
 
-    private static void doClickMove(MinecraftClient client, int syncId, int fromSlotId, int toSlotId) {
-        client.interactionManager.clickSlot(syncId, fromSlotId, 0, SlotActionType.PICKUP, client.player);
-        client.interactionManager.clickSlot(syncId, toSlotId, 0, SlotActionType.PICKUP, client.player);
+    private static void doClickMove(Minecraft client, int syncId, int fromSlotId, int toSlotId) {
+        client.gameMode.handleContainerInput(syncId, fromSlotId, 0, ContainerInput.PICKUP, client.player);
+        client.gameMode.handleContainerInput(syncId, toSlotId, 0, ContainerInput.PICKUP, client.player);
     }
 }

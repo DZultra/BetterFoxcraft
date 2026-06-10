@@ -2,11 +2,10 @@ package net.dzultra.betterfoxcraft.commands.conditions;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.minecraft.client.MinecraftClient;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import net.minecraft.client.Minecraft;
 
 public class ConditionsDataBaseManager {
     private static ConditionsDataBaseManager INSTANCE;
@@ -19,7 +18,7 @@ public class ConditionsDataBaseManager {
 
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    Path baseDirectory = Path.of(MinecraftClient.getInstance().runDirectory.getAbsolutePath(), "conditions");
+    Path baseDirectory = Path.of(Minecraft.getInstance().gameDirectory.getAbsolutePath(), "conditions");
 
     private ConditionsDataBaseManager() {
         try {

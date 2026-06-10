@@ -1,23 +1,11 @@
 package net.dzultra.betterfoxcraft.commands;
 
-import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import net.dzultra.betterfoxcraft.discord.DiscordSlashCommandHandler;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-
-
 public class DiscordCommand {
 //    public static LiteralArgumentBuilder<FabricClientCommandSource> getCommand() {
-//        return ClientCommandManager.literal("dctest")
-//                .then(ClientCommandManager.argument("user", StringArgumentType.word())
-//                        .then(ClientCommandManager.argument("punishment", StringArgumentType.word())
-//                            .then(ClientCommandManager.argument("offence", StringArgumentType.greedyString())
+//        return ClientCommands.literal("dctest")
+//                .then(ClientCommands.argument("user", StringArgumentType.word())
+//                        .then(ClientCommands.argument("punishment", StringArgumentType.word())
+//                            .then(ClientCommands.argument("offence", StringArgumentType.greedyString())
 //                                .executes(ctx -> reportToDiscord(
 //                                        StringArgumentType.getString(ctx,"user"),
 //                                        StringArgumentType.getString(ctx,"punishment"),

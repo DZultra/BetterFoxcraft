@@ -11,30 +11,27 @@ import net.dzultra.jfa.responses.ServerLeaderboardsResponse;
 import net.dzultra.jfa.types.Gamemode;
 import net.dzultra.jfa.types.Period;
 import net.dzultra.jfa.types.leaderboards.*;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Predicate;
 
 public class LeaderboardCommand {
 
     public static LiteralArgumentBuilder<FabricClientCommandSource> getCommand() {
-        return ClientCommandManager.literal("leaderboard")
-                .then(ClientCommandManager.argument("gamemode", StringArgumentType.word())
+        return ClientCommands.literal("leaderboard")
+                .then(ClientCommands.argument("gamemode", StringArgumentType.word())
                         .suggests((ctx, builder) -> suggestGamemodes(builder))
-                        .then(ClientCommandManager.argument("board", StringArgumentType.word())
+                        .then(ClientCommands.argument("board", StringArgumentType.word())
                                 .suggests(LeaderboardCommand::suggestBoards)
-                                .then(ClientCommandManager.argument("period", StringArgumentType.word())
+                                .then(ClientCommands.argument("period", StringArgumentType.word())
                                         .suggests(LeaderboardCommand::suggestPeriods)
                                         .executes(ctx -> runLeaderboard(ctx, -1))
-                                        .then(ClientCommandManager.argument("position", IntegerArgumentType.integer(1, 10))
+                                        .then(ClientCommands.argument("position", IntegerArgumentType.integer(1, 10))
                                                     .executes(ctx ->
                                                             runLeaderboard(ctx, IntegerArgumentType.getInteger(ctx, "position"))
                                                     )
@@ -55,11 +52,11 @@ public class LeaderboardCommand {
         try {
             period = Period.valueOf(periodArg.toUpperCase());
         } catch (IllegalArgumentException e) {
-            source.sendFeedback(Text.literal("Invalid period type.").formatted(Formatting.RED));
+            source.sendFeedback(Component.literal("Invalid period type.").withStyle(ChatFormatting.RED));
             return 0;
         }
         if (type == null) {
-            source.sendFeedback(Text.literal("Invalid leaderboard type.").formatted(Formatting.RED));
+            source.sendFeedback(Component.literal("Invalid leaderboard type.").withStyle(ChatFormatting.RED));
             return 0;
         }
 
@@ -70,10 +67,10 @@ public class LeaderboardCommand {
                     return e;
                 }
         }).thenAccept(result -> {
-                MinecraftClient client = MinecraftClient.getInstance();
+                Minecraft client = Minecraft.getInstance();
                 client.execute(() -> {
                     if (result instanceof Exception) {
-                        source.sendFeedback(Text.literal("Failed to fetch leaderboard.").formatted(Formatting.RED));
+                        source.sendFeedback(Component.literal("Failed to fetch leaderboard.").withStyle(ChatFormatting.RED));
                         return;
                     }
                     ServerLeaderboard leaderboard = (ServerLeaderboard) result;
@@ -91,37 +88,37 @@ public class LeaderboardCommand {
     ) {
         List<ServerLeaderboardsResponse.LeaderboardEntry> data = leaderboard.getEntries();
         if (data == null || data.isEmpty()) {
-            source.sendFeedback(Text.literal("No data found.").formatted(Formatting.RED));
+            source.sendFeedback(Component.literal("No data found.").withStyle(ChatFormatting.RED));
             return;
         }
 
-        source.sendFeedback(Text.literal("┌──────────────────────────┐").formatted(Formatting.DARK_GRAY));
-        source.sendFeedback(Text.literal("   " + leaderboard.getTitle() + " - " + capitalizeFirst(gamemodeArg)).formatted(Formatting.GOLD, Formatting.BOLD));
-        source.sendFeedback(Text.literal("├──────────────────────────┤").formatted(Formatting.DARK_GRAY));
+        source.sendFeedback(Component.literal("┌──────────────────────────┐").withStyle(ChatFormatting.DARK_GRAY));
+        source.sendFeedback(Component.literal("   " + leaderboard.getTitle() + " - " + capitalizeFirst(gamemodeArg)).withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+        source.sendFeedback(Component.literal("├──────────────────────────┤").withStyle(ChatFormatting.DARK_GRAY));
         if (position > 0) {
             ServerLeaderboardsResponse.LeaderboardEntry entry = leaderboard.getEntry(position);
             if (entry == null) {
-                source.sendFeedback(Text.literal("Position not found.").formatted(Formatting.RED));
+                source.sendFeedback(Component.literal("Position not found.").withStyle(ChatFormatting.RED));
             } else {
                 source.sendFeedback(formatEntry(entry));
             }
-            source.sendFeedback(Text.literal("└──────────────────────────┘").formatted(Formatting.DARK_GRAY));
+            source.sendFeedback(Component.literal("└──────────────────────────┘").withStyle(ChatFormatting.DARK_GRAY));
             return;
         }
         for (int i = 0; i < Math.min(10, data.size()); i++) {
             source.sendFeedback(formatEntry(data.get(i)));
         }
-        source.sendFeedback(Text.literal("└──────────────────────────┘").formatted(Formatting.DARK_GRAY));
+        source.sendFeedback(Component.literal("└──────────────────────────┘").withStyle(ChatFormatting.DARK_GRAY));
     }
 
-    private static Text formatEntry(ServerLeaderboardsResponse.LeaderboardEntry entry) {
-        return Text.literal(" #" + entry.position() + " ").formatted(Formatting.YELLOW)
-                .append(Text.literal(entry.username())
-                        .formatted(Formatting.AQUA))
-                .append(Text.literal(" » ")
-                        .formatted(Formatting.DARK_GRAY))
-                .append(Text.literal(String.valueOf(entry.value()))
-                        .formatted(Formatting.GREEN));
+    private static Component formatEntry(ServerLeaderboardsResponse.LeaderboardEntry entry) {
+        return Component.literal(" #" + entry.position() + " ").withStyle(ChatFormatting.YELLOW)
+                .append(Component.literal(entry.username())
+                        .withStyle(ChatFormatting.AQUA))
+                .append(Component.literal(" » ")
+                        .withStyle(ChatFormatting.DARK_GRAY))
+                .append(Component.literal(String.valueOf(entry.value()))
+                        .withStyle(ChatFormatting.GREEN));
     }
 
     private static CompletableFuture<Suggestions> suggestGamemodes(SuggestionsBuilder builder) {
@@ -151,7 +148,7 @@ public class LeaderboardCommand {
         for (LeaderboardType type : values) {
             String id = ((Enum<?>) type).name().toLowerCase();
 
-            builder.suggest(id, Text.literal(type.getTitle()));
+            builder.suggest(id, Component.literal(type.getTitle()));
         }
 
         return builder.buildFuture();

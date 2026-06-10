@@ -2,15 +2,15 @@ package net.dzultra.betterfoxcraft.checker;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import net.dzultra.betterfoxcraft.ModConfig;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.registry.Registries;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 public class LayerChecker {
     public static Block currentBlockToCheck;
@@ -18,11 +18,11 @@ public class LayerChecker {
     public static void checkLayer(String nameOfBlockToCheckFor, Block blockToCheck, int radius, BlockPos centerPos) {
         currentBlockToCheck = blockToCheck;
         String startMessage = "\n--- Layer Check Start ---\n";
-        sendMessage(startMessage, Formatting.GOLD);
+        sendMessage(startMessage, ChatFormatting.GOLD);
 
-        if (MinecraftClient.getInstance().player == null) return;
+        if (Minecraft.getInstance().player == null) return;
 
-        World world = MinecraftClient.getInstance().player.getEntityWorld();
+        Level world = Minecraft.getInstance().player.level();
         boolean allBlocks = true;
         int missingBlocks = 0;
         int maxMissingBlocks = AutoConfig.getConfigHolder(ModConfig.class).getConfig().maxMissingBlocks;
@@ -46,16 +46,16 @@ public class LayerChecker {
                     continue;
                 }
 
-                if (!world.getBlockState(currentPos).isOf(blockToCheck)) {
-                    if (!world.getBlockState(currentPos.down()).isOf(Blocks.WATER)) {
+                if (!world.getBlockState(currentPos).is(blockToCheck)) {
+                    if (!world.getBlockState(currentPos.below()).is(Blocks.WATER)) {
                         allBlocks = false;
                         missingBlocks++;
 
                         String unpackedBlock = " (X: " + currentPos.getX() + " | Y: " + currentPos.getY() + " | Z: " + currentPos.getZ() + ")";
-                        String wrongBlock = Registries.BLOCK.getId(world.getBlockState(currentPos).getBlock()).toString();
+                        String wrongBlock = BuiltInRegistries.BLOCK.getKey(world.getBlockState(currentPos).getBlock()).toString();
                         String message = "Missing Block at " + unpackedBlock + " --> " + wrongBlock;
 
-                        sendMessage(message, Formatting.RED);
+                        sendMessage(message, ChatFormatting.RED);
 
                         // Only spawn particles if we're under the max missing blocks limit
                         if (missingBlocks < maxMissingBlocks) {
@@ -71,8 +71,8 @@ public class LayerChecker {
                 String message1 = "\nThe LayerCheck has been canceled because there can have been more than " + maxMissingBlocks + " missing Blocks detected to avoid spam.\n";
                 String message2 = "\nThis value can be configured in the Settings!\n";
 
-                sendMessage(message1, Formatting.DARK_RED);
-                sendMessage(message2, Formatting.GREEN);
+                sendMessage(message1, ChatFormatting.DARK_RED);
+                sendMessage(message2, ChatFormatting.GREEN);
                 break;
             }
         }
@@ -88,8 +88,8 @@ public class LayerChecker {
         String block = "Block X: " + center.getX() + " Y: " + center.getY() + " Z: " + center.getZ();
         String message1 = "\nAll blocks within radius of " + radius + " from " + block + " are " + nameOfBlockToCheckFor + "!\n";
         String message2 = "\n--- Layer Check End ---\n";
-        sendMessage(message1, Formatting.GREEN);
-        sendMessage(message2, Formatting.GOLD);
+        sendMessage(message1, ChatFormatting.GREEN);
+        sendMessage(message2, ChatFormatting.GOLD);
 
     }
 
@@ -100,20 +100,20 @@ public class LayerChecker {
         } else {
             String block = "Block X: " + center.getX() + " Y: " + center.getY() + " Z: " + center.getZ();
             String message1 = "\n" + missingCount + " non-" + nameOfBlockToCheckFor + " blocks found within radius of " + radius + " from " + block;
-            sendMessage(message1, Formatting.DARK_RED);
+            sendMessage(message1, ChatFormatting.DARK_RED);
         }
 
         String message2 = "\n--- Layer Check End ---\n";
-        sendMessage(message2, Formatting.GOLD);
+        sendMessage(message2, ChatFormatting.GOLD);
     }
 
 
-    protected static void sendMessage(String message, Formatting color) {
-        Text messageWithColor = Text.literal(message).setStyle(Style.EMPTY.withColor(color));
-        MinecraftClient.getInstance().player.sendMessage(messageWithColor, false);
+    protected static void sendMessage(String message, ChatFormatting color) {
+        Component messageWithColor = Component.literal(message).setStyle(Style.EMPTY.withColor(color));
+        Minecraft.getInstance().player.sendSystemMessage(messageWithColor);
     }
-    protected static void sendMessage(String message, Formatting color, boolean bold) {
-        Text messageWithColor = Text.literal(message).setStyle(Style.EMPTY.withColor(color).withBold(bold));
-        MinecraftClient.getInstance().player.sendMessage(messageWithColor, false);
+    protected static void sendMessage(String message, ChatFormatting color, boolean bold) {
+        Component messageWithColor = Component.literal(message).setStyle(Style.EMPTY.withColor(color).withBold(bold));
+        Minecraft.getInstance().player.sendSystemMessage(messageWithColor);
     }
 }

@@ -2,39 +2,38 @@ package net.dzultra.betterfoxcraft.commands;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OneblockChatCommand {
     public static LiteralArgumentBuilder<FabricClientCommandSource> getCommand() {
-        return ClientCommandManager.literal("obc")
-                .then(ClientCommandManager.argument("text", StringArgumentType.greedyString())
+        return ClientCommands.literal("obc")
+                .then(ClientCommands.argument("text", StringArgumentType.greedyString())
                         .executes(context -> {
                             String text = StringArgumentType.getString(context, "text");
                             try {
-                                MinecraftClient client = MinecraftClient.getInstance();
+                                Minecraft client = Minecraft.getInstance();
 
-                                client.getNetworkHandler().sendChatCommand("ob chat");
+                                client.getConnection().sendCommand("ob chat");
 
                                 addDelayedTask(() -> {
-                                    client.player.networkHandler.sendChatMessage(text);
+                                    client.player.connection.sendChat(text);
 
-                                    addDelayedTask(() -> client.getNetworkHandler().sendChatCommand("ob chat"), 10);
+                                    addDelayedTask(() -> client.getConnection().sendCommand("ob chat"), 10);
                                 }, 10);
                             } catch (IllegalArgumentException e) {
                                 System.out.println(e.getMessage());
-                                MinecraftClient.getInstance().player.sendMessage(Text.literal("Wrong Argument: Please use provide a Text to send!").setStyle(Style.EMPTY
-                                                .withColor(Formatting.RED)
+                                Minecraft.getInstance().player.sendSystemMessage(Component.literal("Wrong Argument: Please use provide a Text to send!").setStyle(Style.EMPTY
+                                                .withColor(ChatFormatting.RED)
                                                 .withBold(true))
-                                        , false);
+                                        );
                             }
                             return 1;
                         })

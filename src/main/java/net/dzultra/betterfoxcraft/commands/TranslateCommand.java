@@ -4,17 +4,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.Style;
 
 import java.net.URI;
 import java.net.URLEncoder;
@@ -29,10 +26,10 @@ public class TranslateCommand {
     private static final String API_KEY = "";
 
     public static LiteralArgumentBuilder<FabricClientCommandSource> getCommand() {
-        return ClientCommandManager.literal("translate")
-                .then(ClientCommandManager.argument("language_text", StringArgumentType.string())
-                        .then(ClientCommandManager.argument("language_translate", StringArgumentType.string())
-                                .then(ClientCommandManager.argument("text", StringArgumentType.greedyString())
+        return ClientCommands.literal("translate")
+                .then(ClientCommands.argument("language_text", StringArgumentType.string())
+                        .then(ClientCommands.argument("language_translate", StringArgumentType.string())
+                                .then(ClientCommands.argument("text", StringArgumentType.greedyString())
                                         .executes(context -> {
                                             String fromLang = StringArgumentType.getString(context, "language_text");
                                             String toLang = StringArgumentType.getString(context, "language_translate");
@@ -41,20 +38,19 @@ public class TranslateCommand {
                                             new Thread(() -> {
                                                 try {
                                                     String translated = translate(fromLang, toLang, text);
-                                                    MinecraftClient.getInstance().execute(() -> {
-                                                        MinecraftClient.getInstance().player.sendMessage(
-                                                                Text.literal("\nTranslation: " + translated + "\n")
+                                                    Minecraft.getInstance().execute(() -> {
+                                                        Minecraft.getInstance().player.sendSystemMessage(
+                                                                Component.literal("\nTranslation: " + translated + "\n")
                                                                         .setStyle(Style.EMPTY
                                                                                 .withClickEvent(new ClickEvent.CopyToClipboard(translated))
-                                                                                .withHoverEvent(new HoverEvent.ShowText(Text.literal("Click to Copy!")
-                                                                                        .setStyle(Style.EMPTY.withColor(Formatting.GREEN))))
-                                                                                .withColor(Formatting.GOLD)),
-                                                                false
+                                                                                .withHoverEvent(new HoverEvent.ShowText(Component.literal("Click to Copy!")
+                                                                                        .setStyle(Style.EMPTY.withColor(ChatFormatting.GREEN))))
+                                                                                .withColor(ChatFormatting.GOLD))
                                                         );
                                                     });
                                                 } catch (Exception e) {
-                                                    MinecraftClient.getInstance().execute(() ->
-                                                            MinecraftClient.getInstance().player.sendMessage(Text.literal("Error translating: " + e.getMessage()), false)
+                                                    Minecraft.getInstance().execute(() ->
+                                                            Minecraft.getInstance().player.sendSystemMessage(Component.literal("Error translating: " + e.getMessage()))
                                                     );
                                                 }
                                             }).start();

@@ -8,23 +8,21 @@ import me.shedaniel.autoconfig.AutoConfig;
 import net.dzultra.betterfoxcraft.ModConfig;
 import net.dzultra.jfa.punishments.PlayerPunishments;
 import net.dzultra.jfa.punishments.Punishment;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 public class HistoryCommand {
     public static LiteralArgumentBuilder<FabricClientCommandSource> getCommand() {
-        return ClientCommandManager.literal("hist")
-                .then(ClientCommandManager.argument("username", StringArgumentType.word())
+        return ClientCommands.literal("hist")
+                .then(ClientCommands.argument("username", StringArgumentType.word())
                         .executes(ctx -> runHistory(ctx, 1, true))
-                        .then(ClientCommandManager.argument("page", IntegerArgumentType.integer(1))
+                        .then(ClientCommands.argument("page", IntegerArgumentType.integer(1))
                                 .executes(ctx -> runHistory(
                                         ctx,
                                         IntegerArgumentType.getInteger(ctx, "page"),
@@ -39,7 +37,7 @@ public class HistoryCommand {
         String username = StringArgumentType.getString(ctx, "username");
 
         if (username == null || username.isEmpty()) {
-            source.sendFeedback(Text.literal("Invalid username.").formatted(Formatting.RED));
+            source.sendFeedback(Component.literal("Invalid username.").withStyle(ChatFormatting.RED));
             return 0;
         }
 
@@ -58,10 +56,10 @@ public class HistoryCommand {
                 return e;
             }
         }).thenAccept(result -> {
-            MinecraftClient client = MinecraftClient.getInstance();
+            Minecraft client = Minecraft.getInstance();
             client.execute(() -> {
                 if (result instanceof Exception) {
-                    source.sendFeedback(Text.literal("Failed to fetch punishment history.").formatted(Formatting.RED));
+                    source.sendFeedback(Component.literal("Failed to fetch punishment history.").withStyle(ChatFormatting.RED));
                     return;
                 }
 
@@ -79,7 +77,7 @@ public class HistoryCommand {
 
     private static void displayPage(FabricClientCommandSource source, String username, List<Punishment> punishments, int page) {
         if (punishments == null || punishments.isEmpty()) {
-            source.sendFeedback(Text.literal("No punishments found for " + username + ".").formatted(Formatting.RED));
+            source.sendFeedback(Component.literal("No punishments found for " + username + ".").withStyle(ChatFormatting.RED));
             return;
         }
 
@@ -88,7 +86,7 @@ public class HistoryCommand {
         int maxPage = (int) Math.ceil((double) total / perPage);
 
         if (page > maxPage) {
-            source.sendFeedback(Text.literal("Page " + page + " does not exist. Max page: " + maxPage).formatted(Formatting.RED));
+            source.sendFeedback(Component.literal("Page " + page + " does not exist. Max page: " + maxPage).withStyle(ChatFormatting.RED));
             return;
         }
 
@@ -101,14 +99,14 @@ public class HistoryCommand {
 
     private static void sendHistoryChat(FabricClientCommandSource source, String username, List<Punishment> punishments, int page, int maxPage) {
         if (punishments == null || punishments.isEmpty()) {
-            source.sendFeedback(Text.literal("No punishments found for " + username + ".").formatted(Formatting.RED));
+            source.sendFeedback(Component.literal("No punishments found for " + username + ".").withStyle(ChatFormatting.RED));
             return;
         }
 
         // ----- HEADER -----
-        source.sendFeedback(Text.literal("┌──────────────────────────┐").formatted(Formatting.DARK_GRAY));
-        source.sendFeedback(Text.literal("   Punishment History - " + username + " (" + page + "/" + maxPage + ")").formatted(Formatting.GOLD, Formatting.BOLD));
-        source.sendFeedback(Text.literal("├──────────────────────────┤").formatted(Formatting.DARK_GRAY));
+        source.sendFeedback(Component.literal("┌──────────────────────────┐").withStyle(ChatFormatting.DARK_GRAY));
+        source.sendFeedback(Component.literal("   Punishment History - " + username + " (" + page + "/" + maxPage + ")").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+        source.sendFeedback(Component.literal("├──────────────────────────┤").withStyle(ChatFormatting.DARK_GRAY));
 
         // ----- ENTRIES -----
         for (int i = 0; i < punishments.size(); i++) {
@@ -118,42 +116,42 @@ public class HistoryCommand {
             source.sendFeedback(formatDateLine(p));
             source.sendFeedback(formatExpiresLine(p));
             if (i < punishments.size() - 1) {
-                source.sendFeedback(Text.literal("├──────────────────────────┤").formatted(Formatting.DARK_GRAY));
+                source.sendFeedback(Component.literal("├──────────────────────────┤").withStyle(ChatFormatting.DARK_GRAY));
             }
         }
-        source.sendFeedback(Text.literal("└──────────────────────────┘").formatted(Formatting.DARK_GRAY));
+        source.sendFeedback(Component.literal("└──────────────────────────┘").withStyle(ChatFormatting.DARK_GRAY));
     }
 
-    private static Text formatExpiresLine(Punishment p) {
+    private static Component formatExpiresLine(Punishment p) {
         String expires = (p.expires() == null || p.expires().isEmpty()) ? "Permanent" : p.expires();
-        return Text.literal(" Expires: ").formatted(Formatting.YELLOW).append(Text.literal(expires).formatted(Formatting.GRAY));
+        return Component.literal(" Expires: ").withStyle(ChatFormatting.YELLOW).append(Component.literal(expires).withStyle(ChatFormatting.GRAY));
     }
 
-    private static Text formatHeaderLine(int index, Punishment p) {
-        Formatting typeColor = switch (p.type().toLowerCase()) {
-            case "ban" -> Formatting.RED;
-            case "mute" -> Formatting.LIGHT_PURPLE;
-            case "kick" -> Formatting.GOLD;
-            case "warn", "warning" -> Formatting.YELLOW;
-            default -> Formatting.GRAY;
+    private static Component formatHeaderLine(int index, Punishment p) {
+        ChatFormatting typeColor = switch (p.type().toLowerCase()) {
+            case "ban" -> ChatFormatting.RED;
+            case "mute" -> ChatFormatting.LIGHT_PURPLE;
+            case "kick" -> ChatFormatting.GOLD;
+            case "warn", "warning" -> ChatFormatting.YELLOW;
+            default -> ChatFormatting.GRAY;
         };
 
-        return Text.literal(" #" + index + " ").formatted(Formatting.YELLOW)
-                .append(Text.literal(p.type().toUpperCase()).formatted(typeColor, Formatting.BOLD))
-                .append(Text.literal(" » ").formatted(Formatting.DARK_GRAY))
-                .append(Text.literal(p.moderator()).formatted(Formatting.AQUA));
+        return Component.literal(" #" + index + " ").withStyle(ChatFormatting.YELLOW)
+                .append(Component.literal(p.type().toUpperCase()).withStyle(typeColor, ChatFormatting.BOLD))
+                .append(Component.literal(" » ").withStyle(ChatFormatting.DARK_GRAY))
+                .append(Component.literal(p.moderator()).withStyle(ChatFormatting.AQUA));
     }
 
-    private static Text formatReasonLine(Punishment p) {
+    private static Component formatReasonLine(Punishment p) {
         String reason = (p.reason() == null || p.reason().isEmpty()) ? "No reason specified" : p.reason();
 
-        return Text.literal(" Reason: ").formatted(Formatting.YELLOW)
-                .append(Text.literal(reason).formatted(Formatting.WHITE));
+        return Component.literal(" Reason: ").withStyle(ChatFormatting.YELLOW)
+                .append(Component.literal(reason).withStyle(ChatFormatting.WHITE));
     }
 
-    private static Text formatDateLine(Punishment p) {
-        return Text.literal(" Date: ").formatted(Formatting.YELLOW)
-                .append(Text.literal(p.date()).formatted(Formatting.GRAY));
+    private static Component formatDateLine(Punishment p) {
+        return Component.literal(" Date: ").withStyle(ChatFormatting.YELLOW)
+                .append(Component.literal(p.date()).withStyle(ChatFormatting.GRAY));
     }
 }
 

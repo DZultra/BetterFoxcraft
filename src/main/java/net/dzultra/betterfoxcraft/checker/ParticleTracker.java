@@ -3,13 +3,12 @@ package net.dzultra.betterfoxcraft.checker;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.dzultra.betterfoxcraft.ModConfig;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.block.Block;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,18 +42,18 @@ public class ParticleTracker {
 
     public static void getParticleTracker() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (client.world != null && client.player != null && AutoConfig.getConfigHolder(ModConfig.class).getConfig().enableParticleTracker) {
+            if (client.level != null && client.player != null && AutoConfig.getConfigHolder(ModConfig.class).getConfig().enableParticleTracker) {
                 ParticleTracker.tick(LayerChecker.currentBlockToCheck);
             }
         });
     }
 
     private static void spawnParticlesForPosition(BlockPos pos, Block blockToCheck) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        World world = client.world;
+        Minecraft client = Minecraft.getInstance();
+        Level world = client.level;
 
         if (world == null) return;
-        if (world.getBlockState(pos) == blockToCheck.getDefaultState()) {
+        if (world.getBlockState(pos) == blockToCheck.defaultBlockState()) {
             return;
         }
 
@@ -62,30 +61,30 @@ public class ParticleTracker {
         double y = pos.getY();
         double z = pos.getZ();
 
-        ParticleEffect particleType = ParticleTypes.ELECTRIC_SPARK;
+        ParticleOptions particleType = ParticleTypes.ELECTRIC_SPARK;
 
         double[] edgePositions = {0.0, 0.5, 1.0};
 
         // Horizontal edges (top and bottom)
         for (double edgePos : edgePositions) {
             // Bottom edges
-            world.addParticleClient(particleType, x + edgePos, y,     z,     0, 0, 0); // Front
-            world.addParticleClient(particleType, x,     y,     z + edgePos, 0, 0, 0); // Right
-            world.addParticleClient(particleType, x + edgePos, y,     z + 1, 0, 0, 0); // Back
-            world.addParticleClient(particleType, x + 1, y,     z + edgePos, 0, 0, 0); // Left
+            world.addParticle(particleType, x + edgePos, y,     z,     0, 0, 0); // Front
+            world.addParticle(particleType, x,     y,     z + edgePos, 0, 0, 0); // Right
+            world.addParticle(particleType, x + edgePos, y,     z + 1, 0, 0, 0); // Back
+            world.addParticle(particleType, x + 1, y,     z + edgePos, 0, 0, 0); // Left
 
             // Top edges
-            world.addParticleClient(particleType, x + edgePos, y + 1, z,     0, 0, 0); // Front
-            world.addParticleClient(particleType, x,     y + 1, z + edgePos, 0, 0, 0); // Right
-            world.addParticleClient(particleType, x + edgePos, y + 1, z + 1, 0, 0, 0); // Back
-            world.addParticleClient(particleType, x + 1, y + 1, z + edgePos, 0, 0, 0); // Left
+            world.addParticle(particleType, x + edgePos, y + 1, z,     0, 0, 0); // Front
+            world.addParticle(particleType, x,     y + 1, z + edgePos, 0, 0, 0); // Right
+            world.addParticle(particleType, x + edgePos, y + 1, z + 1, 0, 0, 0); // Back
+            world.addParticle(particleType, x + 1, y + 1, z + edgePos, 0, 0, 0); // Left
         }
 
         // Vertical edges (skip corners since they're already done)
-        world.addParticleClient(particleType, x,     y + 0.5, z,     0, 0, 0); // Front-right
-        world.addParticleClient(particleType, x + 1, y + 0.5, z,     0, 0, 0); // Front-left
-        world.addParticleClient(particleType, x,     y + 0.5, z + 1, 0, 0, 0); // Back-right
-        world.addParticleClient(particleType, x + 1, y + 0.5, z + 1, 0, 0, 0); // Back-left
+        world.addParticle(particleType, x,     y + 0.5, z,     0, 0, 0); // Front-right
+        world.addParticle(particleType, x + 1, y + 0.5, z,     0, 0, 0); // Front-left
+        world.addParticle(particleType, x,     y + 0.5, z + 1, 0, 0, 0); // Back-right
+        world.addParticle(particleType, x + 1, y + 0.5, z + 1, 0, 0, 0); // Back-left
 
     }
 }

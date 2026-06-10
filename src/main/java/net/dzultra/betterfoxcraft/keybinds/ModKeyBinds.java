@@ -1,27 +1,27 @@
 package net.dzultra.betterfoxcraft.keybinds;
 
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.util.Identifier;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.resources.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 public class ModKeyBinds {
-    public static KeyBinding openConfigKeybind;
-    public static KeyBinding moveKeybind;
-    private static final KeyBinding.Category BetterFoxcraftCategory = new KeyBinding.Category(Identifier.of("keybinds.betterfoxcraft.category"));
+    public static KeyMapping openConfigKeybind;
+    public static KeyMapping moveKeybind;
+    private static final KeyMapping.Category BetterFoxcraftCategory = new KeyMapping.Category(Identifier.parse("keybinds.betterfoxcraft.category"));
 
 
     public static void register() {
-        openConfigKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        openConfigKeybind = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "key.betterfoxcraft.open_settings",
-                InputUtil.Type.KEYSYM,
+                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_O,
                 BetterFoxcraftCategory
         ));
-        moveKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        moveKeybind = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "key.betterfoxcraft.move",
-                InputUtil.Type.KEYSYM,
+                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_M,
                 BetterFoxcraftCategory
         ));

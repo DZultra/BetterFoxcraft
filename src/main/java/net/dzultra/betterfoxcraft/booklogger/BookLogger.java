@@ -2,18 +2,14 @@ package net.dzultra.betterfoxcraft.booklogger;
 
 import net.dzultra.betterfoxcraft.BetterFoxcraft;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.WritableBookContentComponent;
-import net.minecraft.component.type.WrittenBookContentComponent;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.text.Text;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.WritableBookContent;
+import net.minecraft.world.item.component.WrittenBookContent;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -26,15 +22,15 @@ public class BookLogger {
 
     public static void getBookLogger() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            ClientWorld world = client.world;
+            ClientLevel world = client.level;
             if (world == null || client.player == null) return;
 
-            for (ItemEntity itemEntity : world.getEntitiesByClass(ItemEntity.class,
-                    client.player.getBoundingBox().expand(64), e -> true)) {
+            for (ItemEntity itemEntity : world.getEntitiesOfClass(ItemEntity.class,
+                    client.player.getBoundingBox().inflate(64), e -> true)) {
 
-                ItemStack stack = itemEntity.getStack();
-                if (stack.isOf(Items.WRITABLE_BOOK)) {
-                    WritableBookContentComponent content = stack.get(DataComponentTypes.WRITABLE_BOOK_CONTENT);
+                ItemStack stack = itemEntity.getItem();
+                if (stack.is(Items.WRITABLE_BOOK)) {
+                    WritableBookContent content = stack.get(DataComponents.WRITABLE_BOOK_CONTENT);
 
                     if (content != null) {
                         StringBuilder text = new StringBuilder();
@@ -48,7 +44,7 @@ public class BookLogger {
                         if (savedBooks.contains(hash)) continue;
                         savedBooks.add(hash);
 
-                        File saveDir = new File(MinecraftClient.getInstance().runDirectory, "saved-data");
+                        File saveDir = new File(Minecraft.getInstance().gameDirectory, "saved-data");
                         if (!saveDir.exists()) saveDir.mkdirs();
 
                         File file = new File(saveDir, "book_" + hash + ".txt");
@@ -60,8 +56,8 @@ public class BookLogger {
                         }
                     }
                 }
-                else if (stack.isOf(Items.WRITTEN_BOOK)) {
-                    WrittenBookContentComponent content = stack.get(DataComponentTypes.WRITTEN_BOOK_CONTENT);
+                else if (stack.is(Items.WRITTEN_BOOK)) {
+                    WrittenBookContent content = stack.get(DataComponents.WRITTEN_BOOK_CONTENT);
 
                     if (content != null) {
                         StringBuilder text = new StringBuilder();
@@ -75,7 +71,7 @@ public class BookLogger {
                         if (savedBooks.contains(hash)) continue;
                         savedBooks.add(hash);
 
-                        File saveDir = new File(MinecraftClient.getInstance().runDirectory, "saved-data");
+                        File saveDir = new File(Minecraft.getInstance().gameDirectory, "saved-data");
                         if (!saveDir.exists()) saveDir.mkdirs();
 
                         File file = new File(saveDir, "book_" + hash + ".txt");

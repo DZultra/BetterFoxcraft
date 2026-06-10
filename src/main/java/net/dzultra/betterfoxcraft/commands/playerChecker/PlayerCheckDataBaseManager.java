@@ -3,18 +3,17 @@ package net.dzultra.betterfoxcraft.commands.playerChecker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.GsonBuilder;
-import net.minecraft.client.MinecraftClient;
-
 import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.client.Minecraft;
 
 public class PlayerCheckDataBaseManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final Path FILE_PATH = Path.of(MinecraftClient.getInstance().runDirectory.getAbsolutePath(), "playercheck", "playersToCheck.json");
+    private static final Path FILE_PATH = Path.of(Minecraft.getInstance().gameDirectory.getAbsolutePath(), "playercheck", "playersToCheck.json");
 
     // Appends a username to the JSON list
     public static void addPlayer(String username) {

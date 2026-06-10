@@ -5,14 +5,13 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.dzultra.betterfoxcraft.ModConfig;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -30,25 +29,25 @@ public class ImgurCommand {
     private static final String IMGUR_UPLOAD_URL = "https://api.imgur.com/3/image";
     public static URI latestGeneratedImgurLink = URI.create("None");
     public static LiteralArgumentBuilder<FabricClientCommandSource> getCommand() {
-        return ClientCommandManager.literal("imgur")
-                .then(ClientCommandManager.argument("title", StringArgumentType.string())
-                        .then(ClientCommandManager.argument("description", StringArgumentType.greedyString())
+        return ClientCommands.literal("imgur")
+                .then(ClientCommands.argument("title", StringArgumentType.string())
+                        .then(ClientCommands.argument("description", StringArgumentType.greedyString())
                                 .executes(context -> uploadScreenshot(context,
                                         StringArgumentType.getString(context, "title"),
                                         StringArgumentType.getString(context, "description")))));
     }
 
     private static int uploadScreenshot(CommandContext<?> context, String title, String description) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        Path screenshotsDir = client.runDirectory.toPath().resolve("screenshots");
+        Minecraft client = Minecraft.getInstance();
+        Path screenshotsDir = client.gameDirectory.toPath().resolve("screenshots");
 
-        client.player.sendMessage(Text.literal("Uploading Screenshot to Imgur. This can take a few seconds")
-                .setStyle(Style.EMPTY.withColor(Formatting.GREEN)), false);
+        client.player.sendSystemMessage(Component.literal("Uploading Screenshot to Imgur. This can take a few seconds")
+                .setStyle(Style.EMPTY.withColor(ChatFormatting.GREEN)));
 
         // Find latest Screenshot
         Optional<Path> latestScreenshot = getLatestScreenshot(screenshotsDir);
         if (latestScreenshot.isEmpty()) {
-            client.execute(() -> client.player.sendMessage(Text.literal("No screenshot found"), false));
+            client.execute(() -> client.player.sendSystemMessage(Component.literal("No screenshot found")));
             return 1;
         }
 
@@ -58,14 +57,14 @@ public class ImgurCommand {
             try {
                 URI response = URI.create(uploadToImgur(imageFile, title, description));
                 latestGeneratedImgurLink = response;
-                client.execute(() -> client.player.sendMessage(
-                        Text.literal("Image successfully uploaded: " + response)
+                client.execute(() -> client.player.sendSystemMessage(
+                        Component.literal("Image successfully uploaded: " + response)
                                 .setStyle(Style.EMPTY
                                         .withClickEvent(new ClickEvent.OpenUrl(response))
-                                ), false
+                                )
                 ));
             } catch (IOException | InterruptedException e) {
-                client.execute(() -> client.player.sendMessage(Text.literal("Error while uploading: " + e.getMessage()), false));
+                client.execute(() -> client.player.sendSystemMessage(Component.literal("Error while uploading: " + e.getMessage())));
                 e.printStackTrace();
             }
         }).start();

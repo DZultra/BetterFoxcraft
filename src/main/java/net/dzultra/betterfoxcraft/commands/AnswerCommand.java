@@ -3,17 +3,16 @@ package net.dzultra.betterfoxcraft.commands;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.dzultra.betterfoxcraft.BetterFoxcraft;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.Style;
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal;
 
 public class AnswerCommand {
     public static final HashMap<String, String> ANSWER_MAP = new HashMap<>();
@@ -92,8 +91,8 @@ public class AnswerCommand {
 
     public static LiteralArgumentBuilder<FabricClientCommandSource> getCommand() {
         var answerCommand = literal("answer").executes(context -> {
-            MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- No specific answer has been chosen -|\n")
-                    .setStyle(Style.EMPTY.withColor(Formatting.RED).withBold(true)), false);
+            Minecraft.getInstance().player.sendSystemMessage(Component.literal("\n|- No specific answer has been chosen -|\n")
+                    .setStyle(Style.EMPTY.withColor(ChatFormatting.RED).withBold(true)));
             return 0;
         });
 
@@ -112,13 +111,13 @@ public class AnswerCommand {
                 faqMessage = "\n|- Could not find answer -|\n";
             }
             String answer = answers.getOrDefault(faqKey, "No answer found");
-            MinecraftClient.getInstance().player.sendMessage(Text.literal(faqMessage)
+            Minecraft.getInstance().player.sendSystemMessage(Component.literal(faqMessage)
                     .setStyle(Style.EMPTY
                             .withClickEvent(new ClickEvent.CopyToClipboard(answer))
-                            .withColor(Formatting.GOLD)
-                            .withHoverEvent(new HoverEvent.ShowText(Text.literal("Click to Copy!")
-                                    .setStyle(Style.EMPTY.withColor(Formatting.GREEN))))
-                    ), false);
+                            .withColor(ChatFormatting.GOLD)
+                            .withHoverEvent(new HoverEvent.ShowText(Component.literal("Click to Copy!")
+                                    .setStyle(Style.EMPTY.withColor(ChatFormatting.GREEN))))
+                    ));
             return 0;
         });
     }

@@ -9,26 +9,26 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenKeyboardEvents;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 
 @Environment(EnvType.CLIENT)
 public class KeybindHandler {
     public static void register() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            while (ModKeyBinds.openConfigKeybind.wasPressed()) {
+            while (ModKeyBinds.openConfigKeybind.consumeClick()) {
                 if (client.player != null) {
-                    MinecraftClient.getInstance().setScreen(ConfigScreenFactory.create(MinecraftClient.getInstance().currentScreen));
+                    Minecraft.getInstance().setScreen(ConfigScreenFactory.create(Minecraft.getInstance().screen));
                 }
             }
         });
 
         ScreenEvents.BEFORE_INIT.register((client, screen, w, h) -> {
             ScreenKeyboardEvents.afterKeyPress(screen).register((scr, key) -> {
-                if (ModKeyBinds.moveKeybind.matchesKey(key) && scr instanceof HandledScreen<?> hs) {
+                if (ModKeyBinds.moveKeybind.matches(key) && scr instanceof AbstractContainerScreen<?> hs) {
                     String title = hs.getTitle().getString();
                     if (AutoConfig.getConfigHolder(ModConfig.class).getConfig().GUIName.equals(title)) {
-                        SlotSwitcher.scheduleConfiguredMoves(client, hs.getScreenHandler());
+                        SlotSwitcher.scheduleConfiguredMoves(client, hs.getMenu());
                     }
                 }
             });

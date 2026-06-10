@@ -3,14 +3,15 @@ package net.dzultra.betterfoxcraft.commands;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.dzultra.betterfoxcraft.BetterFoxcraft;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.*;
-import net.minecraft.util.Formatting;
-
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal;
 
 public class DurationCommand {
     public static final HashMap<String, String> DURA_MAP = new HashMap<>();
@@ -57,8 +58,8 @@ public class DurationCommand {
 
     public static LiteralArgumentBuilder<FabricClientCommandSource> getCommand() {
         var durationCommand = literal("dura").executes(context -> {
-            MinecraftClient.getInstance().player.sendMessage(Text.literal("\n|- No specific duration has been chosen -|\n")
-                    .setStyle(Style.EMPTY.withColor(Formatting.RED).withBold(true)), false);
+            Minecraft.getInstance().player.sendSystemMessage(Component.literal("\n|- No specific duration has been chosen -|\n")
+                    .setStyle(Style.EMPTY.withColor(ChatFormatting.RED).withBold(true)));
             return 0;
         });
 
@@ -72,13 +73,13 @@ public class DurationCommand {
     public static LiteralArgumentBuilder<FabricClientCommandSource> explanations(String durationKey, Map<String, String> durations) {
         return literal(durationKey).executes(context -> {
             String duration = durations.getOrDefault(durationKey, "No duration found");
-            MutableText durationMessage = Text.literal("\n|- The Duration for " + durationKey + " -|\n" + duration);
+            MutableComponent durationMessage = Component.literal("\n|- The Duration for " + durationKey + " -|\n" + duration);
             if(!durations.containsKey(durationKey)) {
                 BetterFoxcraft.LOGGER.info("Could not register Duration: {} No duration found", durationKey);
-                durationMessage = Text.literal("\n|- Could not find duration -|\n");
+                durationMessage = Component.literal("\n|- Could not find duration -|\n");
             }
-            MinecraftClient.getInstance().player.sendMessage(durationMessage
-                    .setStyle(Style.EMPTY.withColor(Formatting.GOLD)), false);
+            Minecraft.getInstance().player.sendSystemMessage(durationMessage
+                    .setStyle(Style.EMPTY.withColor(ChatFormatting.GOLD)));
             return 0;
         });
     }

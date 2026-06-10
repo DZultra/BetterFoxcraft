@@ -6,26 +6,26 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.dzultra.betterfoxcraft.ModConfig;
 import net.dzultra.betterfoxcraft.selector.BlockSelector;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 public class LayerCheckerCommand {
 
-    public static LiteralArgumentBuilder<FabricClientCommandSource> getCommand(CommandRegistryAccess commandRegistryAccess) {
-        return ClientCommandManager.literal("layerchecker")
-                .then(ClientCommandManager.argument("block", StringArgumentType.string())
-                        .then(ClientCommandManager.argument("radius", IntegerArgumentType.integer())
+    public static LiteralArgumentBuilder<FabricClientCommandSource> getCommand(CommandBuildContext commandRegistryAccess) {
+        return ClientCommands.literal("layerchecker")
+                .then(ClientCommands.argument("block", StringArgumentType.string())
+                        .then(ClientCommands.argument("radius", IntegerArgumentType.integer())
                                 // Version with all coordinates
-                                .then(ClientCommandManager.argument("x", IntegerArgumentType.integer())
-                                        .then(ClientCommandManager.argument("y", IntegerArgumentType.integer())
-                                                .then(ClientCommandManager.argument("z", IntegerArgumentType.integer())
+                                .then(ClientCommands.argument("x", IntegerArgumentType.integer())
+                                        .then(ClientCommands.argument("y", IntegerArgumentType.integer())
+                                                .then(ClientCommands.argument("z", IntegerArgumentType.integer())
                                                         .executes(context -> checkForEmptySpots(
                                                                 StringArgumentType.getString(context, "block"),
                                                                 IntegerArgumentType.getInteger(context, "radius"),
@@ -46,9 +46,9 @@ public class LayerCheckerCommand {
     }
 
     public static int checkForEmptySpots(String nameOfBlockToCheckFor, int radius, int x, int y, int z) {
-        Identifier blockId = Identifier.of(nameOfBlockToCheckFor);
+        Identifier blockId = Identifier.parse(nameOfBlockToCheckFor);
 
-        Block blockToCheck = Registries.BLOCK.get(blockId);
+        Block blockToCheck = BuiltInRegistries.BLOCK.getValue(blockId);
 
         int maxRadius = AutoConfig.getConfigHolder(ModConfig.class).getConfig().maxRadius;
 
@@ -57,9 +57,9 @@ public class LayerCheckerCommand {
             String message2 = "Radius out of bound: Cannot be bigger than " + maxRadius;
             String message3 = "\n--- Layer Check End ---\n";
 
-            LayerChecker.sendMessage(message1, Formatting.GOLD);
-            LayerChecker.sendMessage(message2, Formatting.RED);
-            LayerChecker.sendMessage(message3, Formatting.GOLD);
+            LayerChecker.sendMessage(message1, ChatFormatting.GOLD);
+            LayerChecker.sendMessage(message2, ChatFormatting.RED);
+            LayerChecker.sendMessage(message3, ChatFormatting.GOLD);
 
             return 1;
         }
@@ -70,9 +70,9 @@ public class LayerCheckerCommand {
             String message2 = "Block does not exist: " + nameOfBlockToCheckFor;
             String message3 = "\n--- Layer Check End ---\n";
 
-            LayerChecker.sendMessage(message1, Formatting.GOLD);
-            LayerChecker.sendMessage(message2, Formatting.RED);
-            LayerChecker.sendMessage(message3, Formatting.GOLD);
+            LayerChecker.sendMessage(message1, ChatFormatting.GOLD);
+            LayerChecker.sendMessage(message2, ChatFormatting.RED);
+            LayerChecker.sendMessage(message3, ChatFormatting.GOLD);
 
             return 1;
         }
@@ -83,9 +83,9 @@ public class LayerCheckerCommand {
     }
 
     public static int checkForEmptySpots(String nameOfBlockToCheckFor, int radius) {
-        Identifier blockId = Identifier.of(nameOfBlockToCheckFor);
+        Identifier blockId = Identifier.parse(nameOfBlockToCheckFor);
 
-        Block blockToCheck = Registries.BLOCK.get(blockId);
+        Block blockToCheck = BuiltInRegistries.BLOCK.getValue(blockId);
 
         int maxRadius = AutoConfig.getConfigHolder(ModConfig.class).getConfig().maxRadius;
 
@@ -94,9 +94,9 @@ public class LayerCheckerCommand {
             String message2 = "Radius out of bound: Cannot be bigger than " + maxRadius;
             String message3 = "\n--- Layer Check End ---\n";
 
-            LayerChecker.sendMessage(message1, Formatting.GOLD);
-            LayerChecker.sendMessage(message2, Formatting.RED);
-            LayerChecker.sendMessage(message3, Formatting.GOLD);
+            LayerChecker.sendMessage(message1, ChatFormatting.GOLD);
+            LayerChecker.sendMessage(message2, ChatFormatting.RED);
+            LayerChecker.sendMessage(message3, ChatFormatting.GOLD);
 
             return 1;
         }
@@ -107,9 +107,9 @@ public class LayerCheckerCommand {
             String message2 = "Block does not exist: " + nameOfBlockToCheckFor;
             String message3 = "\n--- Layer Check End ---\n";
 
-            LayerChecker.sendMessage(message1, Formatting.GOLD);
-            LayerChecker.sendMessage(message2, Formatting.RED);
-            LayerChecker.sendMessage(message3, Formatting.GOLD);
+            LayerChecker.sendMessage(message1, ChatFormatting.GOLD);
+            LayerChecker.sendMessage(message2, ChatFormatting.RED);
+            LayerChecker.sendMessage(message3, ChatFormatting.GOLD);
 
             return 1;
         }
@@ -119,9 +119,9 @@ public class LayerCheckerCommand {
             String message2 = "No coordinates have been provided and no block has been selected";
             String message3 = "\n--- Layer Check End ---\n";
 
-            LayerChecker.sendMessage(message1, Formatting.GOLD);
-            LayerChecker.sendMessage(message2, Formatting.RED);
-            LayerChecker.sendMessage(message3, Formatting.GOLD);
+            LayerChecker.sendMessage(message1, ChatFormatting.GOLD);
+            LayerChecker.sendMessage(message2, ChatFormatting.RED);
+            LayerChecker.sendMessage(message3, ChatFormatting.GOLD);
 
             return 1;
         }

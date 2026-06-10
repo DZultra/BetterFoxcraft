@@ -4,16 +4,16 @@ import me.shedaniel.autoconfig.AutoConfig;
 import net.dzultra.betterfoxcraft.ModConfig;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.HitResult;
 
 public class BlockSelector {
     public static BlockPos selectedBlockPos = null;
@@ -21,7 +21,7 @@ public class BlockSelector {
 
     public static void getBlockSelector(){
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (client.world != null && selectedBlockPos != null && AutoConfig.getConfigHolder(ModConfig.class).getConfig().enableParticleTracker) {
+            if (client.level != null && selectedBlockPos != null && AutoConfig.getConfigHolder(ModConfig.class).getConfig().enableParticleTracker) {
                 spawnParticlesForPosition(selectedBlockPos, selectedBlock);
             }
         });
@@ -29,10 +29,10 @@ public class BlockSelector {
 
     public static void getUseBlockCallback() {
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
-            if (!AutoConfig.getConfigHolder(ModConfig.class).getConfig().enableBlockSelector || !player.getStackInHand(hand).isEmpty()) return ActionResult.PASS;
+            if (!AutoConfig.getConfigHolder(ModConfig.class).getConfig().enableBlockSelector || !player.getItemInHand(hand).isEmpty()) return InteractionResult.PASS;
 
 
-            if (world.isClient() && hand == Hand.MAIN_HAND && hitResult.getType() == HitResult.Type.BLOCK) {
+            if (world.isClientSide() && hand == InteractionHand.MAIN_HAND && hitResult.getType() == HitResult.Type.BLOCK) {
                 BlockPos pos = hitResult.getBlockPos();
                 BlockState state = world.getBlockState(pos);
 
@@ -46,13 +46,13 @@ public class BlockSelector {
                     selectedBlock = state.getBlock();
                 }
             }
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         });
     }
 
     private static void spawnParticlesForPosition(BlockPos pos, Block block) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        World world = client.world;
+        Minecraft client = Minecraft.getInstance();
+        Level world = client.level;
 
         if (world == null) return;
         if (!AutoConfig.getConfigHolder(ModConfig.class).getConfig().enableBlockSelector) {
@@ -62,7 +62,7 @@ public class BlockSelector {
         }
 
         // Use GLOW particles - they're brighter and more visible than WAX_ON
-        ParticleEffect particleType = ParticleTypes.WAX_ON;
+        ParticleOptions particleType = ParticleTypes.WAX_ON;
 
         // Make the box slightly bigger (0.1 blocks outside the block)
         double BOX_OFFSET = AutoConfig.getConfigHolder(ModConfig.class).getConfig().boxOffset;
@@ -83,37 +83,37 @@ public class BlockSelector {
             double zPos = minZ + (maxZ - minZ) * edgePos;
 
             // Bottom edges
-            world.addParticleClient(particleType, xPos, minY, minZ, 0, 0, 0);
-            world.addParticleClient(particleType, minX, minY, zPos, 0, 0, 0);
-            world.addParticleClient(particleType, xPos, minY, maxZ, 0, 0, 0);
-            world.addParticleClient(particleType, maxX, minY, zPos, 0, 0, 0);
+            world.addParticle(particleType, xPos, minY, minZ, 0, 0, 0);
+            world.addParticle(particleType, minX, minY, zPos, 0, 0, 0);
+            world.addParticle(particleType, xPos, minY, maxZ, 0, 0, 0);
+            world.addParticle(particleType, maxX, minY, zPos, 0, 0, 0);
 
             // Top edges
-            world.addParticleClient(particleType, xPos, maxY, minZ, 0, 0, 0);
-            world.addParticleClient(particleType, minX, maxY, zPos, 0, 0, 0);
-            world.addParticleClient(particleType, xPos, maxY, maxZ, 0, 0, 0);
-            world.addParticleClient(particleType, maxX, maxY, zPos, 0, 0, 0);
+            world.addParticle(particleType, xPos, maxY, minZ, 0, 0, 0);
+            world.addParticle(particleType, minX, maxY, zPos, 0, 0, 0);
+            world.addParticle(particleType, xPos, maxY, maxZ, 0, 0, 0);
+            world.addParticle(particleType, maxX, maxY, zPos, 0, 0, 0);
         }
 
         // Vertical edges (more of them at different heights)
         for (double heightPos : heightPositions) {
             double yPos = minY + (maxY - minY) * heightPos;
 
-            world.addParticleClient(particleType, minX, yPos, minZ, 0, 0, 0);
-            world.addParticleClient(particleType, maxX, yPos, minZ, 0, 0, 0);
-            world.addParticleClient(particleType, minX, yPos, maxZ, 0, 0, 0);
-            world.addParticleClient(particleType, maxX, yPos, maxZ, 0, 0, 0);
+            world.addParticle(particleType, minX, yPos, minZ, 0, 0, 0);
+            world.addParticle(particleType, maxX, yPos, minZ, 0, 0, 0);
+            world.addParticle(particleType, minX, yPos, maxZ, 0, 0, 0);
+            world.addParticle(particleType, maxX, yPos, maxZ, 0, 0, 0);
         }
 
         // Corner particles for better definition
-        world.addParticleClient(particleType, minX, minY, minZ, 0, 0, 0);
-        world.addParticleClient(particleType, maxX, minY, minZ, 0, 0, 0);
-        world.addParticleClient(particleType, minX, minY, maxZ, 0, 0, 0);
-        world.addParticleClient(particleType, maxX, minY, maxZ, 0, 0, 0);
-        world.addParticleClient(particleType, minX, maxY, minZ, 0, 0, 0);
-        world.addParticleClient(particleType, maxX, maxY, minZ, 0, 0, 0);
-        world.addParticleClient(particleType, minX, maxY, maxZ, 0, 0, 0);
-        world.addParticleClient(particleType, maxX, maxY, maxZ, 0, 0, 0);
+        world.addParticle(particleType, minX, minY, minZ, 0, 0, 0);
+        world.addParticle(particleType, maxX, minY, minZ, 0, 0, 0);
+        world.addParticle(particleType, minX, minY, maxZ, 0, 0, 0);
+        world.addParticle(particleType, maxX, minY, maxZ, 0, 0, 0);
+        world.addParticle(particleType, minX, maxY, minZ, 0, 0, 0);
+        world.addParticle(particleType, maxX, maxY, minZ, 0, 0, 0);
+        world.addParticle(particleType, minX, maxY, maxZ, 0, 0, 0);
+        world.addParticle(particleType, maxX, maxY, maxZ, 0, 0, 0);
     }
 
     public static boolean hasSelection() {

@@ -28,13 +28,13 @@
 		"betterfoxcraft.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.18.4",
-		"minecraft": "~1.21.11",
-		"java": ">=21",
-		"fabric-api": ">=0.141.2+1.21.11",
-		"cloth-config": ">=21.11.153"
+		"fabricloader": ">=0.19.3",
+		"minecraft": "~26.1.2",
+		"java": ">=25",
+		"fabric-api": ">=0.151.0+26.1.2",
+		"cloth-config": ">=26.1.154"
 	},
 	"suggests": {
-		"mod-menu": ">=17.0.0-beta.2"
+		"mod-menu": ">=18.0.0-beta.1"
 	}
 }
