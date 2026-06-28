@@ -47,7 +47,8 @@ public class BetterFoxcraftClient implements ClientModInitializer {
             //dispatcher.register(LeaderboardCommand.getCommand());
             //dispatcher.register(PlayerStatsCommand.getCommand());
             //dispatcher.register(HistoryCommand.getCommand());
-            dispatcher.register(GoCommand.getCommand());
+            //dispatcher.register(GoCommand.getCommand());
+            dispatcher.register(VisitsTrackCommand.getCommand());
         }));
         ClientTickHandler.register();
         ModKeyBinds.register();
