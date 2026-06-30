@@ -1,4 +1,4 @@
-package net.dzultra.betterfoxcraft.menu_data;
+package net.dzultra.betterfoxcraft.menu_interactions;
 
 import net.dzultra.betterfoxcraft.BetterFoxcraft;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
@@ -29,7 +29,7 @@ public class DataGrabber {
                 // We have a Screen
                 if (!(currentScreen instanceof ContainerScreen containerScreen)) return;
                 // We have a Container Screen
-                if(!isCorrectTitle(containerScreen)) return;
+                if(!MenuHelper.isCorrectTitle(containerScreen, containerTitle)) return;
                 tickCount++;
                 // We have a Container Screen with the correct Title
 
@@ -48,9 +48,6 @@ public class DataGrabber {
         });
     }
 
-    private static boolean isCorrectTitle(ContainerScreen containerScreen) {
-        return containerScreen.getTitle().getString().equals(containerTitle);
-    }
 
     private static void doFilterClicks(Minecraft client, ContainerScreen containerScreen, int slotNum) {
         MultiPlayerGameMode gameMode = client.gameMode;
