@@ -22,7 +22,7 @@ public class GrowstationClicking {
                 // We have a Container Screen
                 if(!MenuHelper.isCorrectTitle(containerScreen, containerTitle)) return;
                 // We have a Container Screen with the correct title
-                doEmptyClicks(client, containerScreen, List.of(21, 49));
+                doEmptyClicks(client, containerScreen, List.of(22, 49));
             });
         });
     }
