@@ -38,7 +38,7 @@ public class DataGrabber {
                 } else {
                     if(grabbedData || tickCount < 3) return;
                     getContainerItems(containerScreen);
-                    client.setScreen(null);
+                    client.gui.setScreen(null);
                     grabbedData = false;
                     tickCount = 0;
                     enabled = false;

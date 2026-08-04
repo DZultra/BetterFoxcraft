@@ -18,7 +18,7 @@ public class KeybindHandler {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (ModKeyBinds.openConfigKeybind.consumeClick()) {
                 if (client.player != null) {
-                    Minecraft.getInstance().setScreen(ConfigScreenFactory.create(Minecraft.getInstance().screen));
+                    Minecraft.getInstance().gui.setScreen(ConfigScreenFactory.create(Minecraft.getInstance().gui.screen()));
                 }
             }
         });

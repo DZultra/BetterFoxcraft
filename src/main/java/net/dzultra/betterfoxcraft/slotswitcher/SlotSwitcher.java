@@ -29,7 +29,7 @@ public class SlotSwitcher {
             if (queue.isEmpty()) return;
 
             // if player closed screen or not in a HandledScreen -> cancel pending moves
-            if (!(client.screen instanceof AbstractContainerScreen<?> hs)) {
+            if (!(client.gui.screen() instanceof AbstractContainerScreen<?> hs)) {
                 queue.clear();
                 cooldown = 0;
                 return;
